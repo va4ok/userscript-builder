@@ -1,0 +1,26 @@
+{
+  "name": "userscript-builder",
+  "version": "0.1.0",
+  "description": "Tool for building userscript for teampermonkey. Uses ES6 classes.",
+  "main": "builder/build.js",
+  "bin": "./bin/builder.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/va4ok/userscript-builder.git"
+  },
+  "keywords": [
+    "jira"
+  ],
+  "author": "va4ok",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/va4ok/userscript-builder/issues"
+  },
+  "homepage": "https://github.com/va4ok/userscript-builder#readme",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  }
+}
