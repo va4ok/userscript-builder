@@ -2,6 +2,8 @@
 
 Tool for building userscript for tampermonkey. Uses ES6 classes.
 
+You can use css files as well, don't forget import css files via import 'some-css.css'. Extension is required.
+
 ## Getting Started
 
 Update Your package.json with userscript section
