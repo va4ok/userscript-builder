@@ -70,6 +70,43 @@ Install with yarn:
 yarn add userscript-builder --dev
 ```
 
+### Build options
+
+Dev - no version changes
+
+```bash
+npm run userscript-builder --mode dev
+or
+npm run userscript-builder
+```
+
+Release-bugfix - bugfix version will increase and commited into package.json file
+
+```bash
+npm run userscript-builder --mode bugfix
+or
+npm run userscript-builder --mode bug
+2.7.1 -> 2.7.2
+```
+
+Release-minor - minor version will increase and commited into package.json file
+
+```bash
+npm run userscript-builder --mode minor
+or
+npm run userscript-builder --mode min
+2.7.1 -> 2.8.0
+```
+
+Release-major - major version will increase and commited into package.json file
+
+```bash
+npm run userscript-builder --mode major
+or
+npm run userscript-builder --mode maj
+2.7.1 -> 3.0.0
+```
+
 ## How it works
 
 Create your entry file with selfexecuted function
