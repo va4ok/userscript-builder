@@ -15,7 +15,9 @@
     "url": "git+https://github.com/va4ok/userscript-builder.git"
   },
   "keywords": [
-    "jira"
+    "userscript",
+    "tampermonkey",
+    "builder"
   ],
   "author": "va4ok",
   "license": "MIT",
