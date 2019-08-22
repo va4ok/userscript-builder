@@ -19,7 +19,7 @@ Update Your package.json with userscript section
     "release": "./release",        // Output folder for release builds
     "fileName": "filename",        // Output filename -> filename.user.js
     "meta": {                      // Userscript meta info
-      "name": "Jira Task2Branch",
+      "name": "User script name",
       "namespace": "http://tampermonkey.net/",
       "homepage": "https://openuserjs.org/scripts/va4ok",
       "match": "*://*.*",
@@ -66,6 +66,103 @@ Install with yarn:
 
 ```bash
 yarn add userscript-builder --dev
+```
+
+## How it works
+
+Create your entry file with selfexecuted function
+
+```bash
+import { Class1 } from './class1/class1.js';
+import { StaticClass } from './static-class/static-class.js';
+
+(function () {
+  'use strict';
+
+  const class1 = new Class1();
+
+  class1.doSomething();
+  StaticClass.saySomerthing();
+})();
+```
+
+Use ES6 classes and imports to organize you code.
+
+```bash
+import { StaticClass } from './../static-class/static-class.js';
+import './class1.css';
+
+const CLASS1_CONST = 200;
+ 
+ export class Class1 {
+   doSomething() {
+     console.log('Class 1');
+   }
+ }
+```
+
+Build your user script and publish on https://openuserjs.org
+
+```bash
+// ==UserScript==
+// @name         User script name
+// @namespace    http://tampermonkey.net/
+// @version      0.0.1
+// @description  description
+// @author       va4ok
+// @match        *://*.*
+// @grant        none
+// @source       git+https://github.com/va4ok/userscript-builder.git
+// @license      MIT
+// @homepage     https://openuserjs.org/scripts/va4ok
+// ==/UserScript==
+
+// src/static-class/static-class.js
+class StaticClass {
+  static saySomerthing() {
+    console.log('static class method');
+  }
+}
+
+// src/class1/class1.js
+const CLASS1_CONST = 200;
+
+class Class1 {
+  doSomething() {
+    console.log('Class 1');
+  }
+}
+
+// ./src/index.js
+let notificator;
+
+(function () {
+  'use strict';
+
+  const class1 = new Class1();
+
+  class1.doSomething();
+  StaticClass.saySomerthing();
+})();
+
+// CSS injection
+(function(){
+  const $style = document.createElement('style');
+
+  $style.innerHTML = `/* src/class1/class1.css */
+.class1-container {
+  transition: height 1s ease-out;
+  background-color: #3dcd59;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 0;
+  z-index: 1000;
+}`;
+  document.body.appendChild($style);
+})();
 ```
 
 ## Running the tests
