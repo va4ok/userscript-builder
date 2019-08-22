@@ -1,8 +1,15 @@
 # userscript-builder
 
-Tool for building userscript for tampermonkey. Uses ES6 classes.
+Simple tool for building userscript for tampermonkey.
 
-You can use css files as well, don't forget import css files via import 'some-css.css'. Extension is required.
+* Simple configuration.
+* Uses ES6 classes syntax.
+* Support css files.
+* No webpack
+* No babel
+* The only one third party dependency
+
+Don't forget import css files via ```import 'some-css.css'```. Extension is required.
 
 ## Getting Started
 
