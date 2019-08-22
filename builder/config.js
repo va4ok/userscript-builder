@@ -3,26 +3,36 @@ const defaults = require('./defaults');
 const path = require('path');
 
 function init() {
-  const packageJson = require(path.join(process.env.INIT_CWD, 'package'));
-
+  let packageJson;
   let config = null;
 
-  const meta = {
-    name: packageJson.name,
-    version: packageJson.version,
-    description: packageJson.description,
-    author: packageJson.author,
-    source: packageJson.repository.url,
-    license: packageJson.license
-  };
+  try {
+    packageJson = require(path.join(process.env.INIT_CWD, 'package'));
+  } catch (e) {
+    console.log('package.json wasn\'t found. Default parameters will be used.');
+    console.error(e);
+  }
 
   // default -> package -> userscript
-  if (packageJson.userscript) {
-    config = {...defaults.config, ...packageJson.userscript};
-    config.meta = {...defaults.meta, ...meta, ...(packageJson.userscript.meta || {})};
+  if (packageJson) {
+    const meta = {
+      name: packageJson.name,
+      version: packageJson.version,
+      description: packageJson.description,
+      author: packageJson.author,
+      source: packageJson.repository ? (packageJson.repository.url ? packageJson.repository.url : packageJson.repository) : '',
+      license: packageJson.license
+    };
+
+    if (packageJson.userscript) {
+      config = {...defaults.config, ...packageJson.userscript};
+      config.meta = {...defaults.meta, ...meta, ...(packageJson.userscript.meta || {})};
+    } else {
+      config = {...defaults.config};
+      config.meta = {...defaults.meta, ...meta};
+    }
   } else {
-    config = {...defaults.config};
-    config.meta = {...defaults.meta, ...meta};
+    config = {...defaults.config, meta: defaults.meta};
   }
 
   module.exports = config;

@@ -4,6 +4,9 @@
   "description": "Tool for building userscript for teampermonkey. Uses ES6 classes.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
+  "engines": {
+    "node": ">=6.11.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
