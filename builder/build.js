@@ -17,7 +17,7 @@ function build() {
   const argv = minimist(process.argv.slice(2));
   const newversion = version.increase(config.meta.version, argv['mode']);
   const isRelease = newversion !== config.meta.version;
-  const outFolder = path.join(process.env.INIT_CWD, isRelease ? config.release : config.dev);
+  const outFolder = path.join(process.cwd(), isRelease ? config.release : config.dev);
 
   console.log(`Build in ${isRelease ? 'release-' : ''}${argv['mode']} mode`);
 

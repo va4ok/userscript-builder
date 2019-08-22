@@ -41,7 +41,7 @@ function increase(version, position) {
 }
 
 function save(version) {
-  const packageJsonPath = path.join(process.env.INIT_CWD, 'package.json');
+  const packageJsonPath = path.join(process.cwd(), 'package.json');
   const packageJson = require(packageJsonPath);
 
   packageJson.version = version;

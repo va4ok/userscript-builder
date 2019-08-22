@@ -7,7 +7,7 @@ function init() {
   let config = null;
 
   try {
-    packageJson = require(path.join(process.env.INIT_CWD, 'package'));
+    packageJson = require(path.join(process.cwd(), 'package'));
   } catch (e) {
     console.log('package.json wasn\'t found. Default parameters will be used.');
     console.error(e);
