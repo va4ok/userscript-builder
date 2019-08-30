@@ -1,14 +1,18 @@
 {
   "name": "userscript-builder",
-  "version": "0.1.1",
-  "description": "Tool for building userscript for teampermonkey. Uses ES6 classes.",
+  "version": "0.1.2",
+  "description": "Tool for building userscript for teampermonkey.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
   "engines": {
     "node": ">=6.11.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example:dev": "node ./bin/builder.js --mode dev",
+    "example:release-bug": "node ./bin/builder.js --mode bugfix",
+    "example:release-minor": "node ./bin/builder.js --mode minor",
+    "example:release-major": "node ./bin/builder.js --mode major"
   },
   "repository": {
     "type": "git",
@@ -27,5 +31,18 @@
   "homepage": "https://github.com/va4ok/userscript-builder#readme",
   "dependencies": {
     "minimist": "^1.2.0"
+  },
+  "userscript": {
+    "entry": "./example/index.js",
+    "dev": "./dist",
+    "release": "./release",
+    "fileName": "example",
+    "meta": {
+      "name": "Example",
+      "namespace": "http://tampermonkey.net/",
+      "homepage": "https://openuserjs.org/scripts/va4ok",
+      "match": "*://*.*",
+      "grant": "none"
+    }
   }
 }
