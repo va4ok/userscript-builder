@@ -1,6 +1,6 @@
 {
   "name": "userscript-builder",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Tool for building userscript for teampermonkey.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
