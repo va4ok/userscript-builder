@@ -1,7 +1,7 @@
 {
   "name": "userscript-builder",
-  "version": "0.1.1",
-  "description": "Tool for building userscript for teampermonkey. Uses ES6 classes.",
+  "version": "0.1.2",
+  "description": "Tool for building userscript for teampermonkey.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
   "engines": {

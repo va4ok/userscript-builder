@@ -226,3 +226,11 @@ Not implemented yet.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## History
+
+0.1.2 - Add examples
+
+0.1.1 - Fix Current Working Directory using
+
+0.1.0 - Dev and release modes support
