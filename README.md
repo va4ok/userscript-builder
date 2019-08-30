@@ -229,6 +229,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
+0.1.5 - Remove source path comments in code built in release mode
+
 0.1.4 - Remove leading dot for entry file
 
 0.1.3 - Build progress available for css files 

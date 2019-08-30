@@ -34,7 +34,7 @@ function build() {
   config.meta.version = newversion;
 
   buildTree(config.entry);
-  fs.writeFileSync(outFileName, getOutFile());
+  fs.writeFileSync(outFileName, getOutFile(!isRelease));
 
   if (isRelease) {
     version.save(newversion);
@@ -93,7 +93,7 @@ function getImportPath(_import) {
   return _import.split(/['"]/g)[1];
 }
 
-function getOutFile() {
+function getOutFile(addFilePathComments) {
   let out = getMeta();
 
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
@@ -101,13 +101,17 @@ function getOutFile() {
   files.forEach(file => {
     console.log(`${file.filePath.replace(/^\.\//g, '')}`);
     out += os.EOL + os.EOL;
-    out += `// ${file.filePath}${os.EOL}`;
+
+    if (addFilePathComments) {
+      out += `// ${file.filePath.replace(/^\.\//g, '')}${os.EOL}`;
+    }
+
     out += file.file;
   });
 
   if (css.length) {
     console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
-    out += inlineCss(css, filePath => console.log(filePath));
+    out += inlineCss(css, addFilePathComments, filePath => console.log(filePath));
   }
 
   return out;
