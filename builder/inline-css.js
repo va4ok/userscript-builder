@@ -1,12 +1,13 @@
 'use strict';
 
-function inlineCss(cssArray) {
+function inlineCss(cssArray, onFileProgress) {
   let css = '';
 
   cssArray.forEach((element, index) => {
     index && (css += '\r\n');
     css += `/* ${element.filePath} */\r\n`;
     css += element.file;
+    onFileProgress(element.filePath);
   });
 
   return `

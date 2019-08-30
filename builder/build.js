@@ -75,7 +75,7 @@ function buildTree(filePath, parentPath) {
   });
 
   if (/\.css$/g.test(filePath)) {
-    css.push({file, filePath: filePath.split('\\').join('/')});
+    css.push({ file, filePath: filePath.split('\\').join('/') });
   } else {
     files.push({
       file: file
@@ -96,6 +96,8 @@ function getImportPath(_import) {
 function getOutFile() {
   let out = getMeta();
 
+  console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
+
   files.forEach(file => {
     console.log(`${file.filePath}`);
     out += os.EOL + os.EOL;
@@ -104,7 +106,8 @@ function getOutFile() {
   });
 
   if (css.length) {
-    out += inlineCss(css);
+    console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
+    out += inlineCss(css, filePath => console.log(filePath));
   }
 
   return out;
