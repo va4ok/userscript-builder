@@ -229,6 +229,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
+0.1.3 - Build progress available for css files 
+
 0.1.2 - Add examples
 
 0.1.1 - Fix Current Working Directory using
