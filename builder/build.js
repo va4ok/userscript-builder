@@ -99,7 +99,7 @@ function getOutFile() {
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
 
   files.forEach(file => {
-    console.log(`${file.filePath}`);
+    console.log(`${file.filePath.replace(/^\.\//g, '')}`);
     out += os.EOL + os.EOL;
     out += `// ${file.filePath}${os.EOL}`;
     out += file.file;
