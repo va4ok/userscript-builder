@@ -5,6 +5,7 @@ const os = require('os');
 const minimist = require('minimist');
 
 const inlineCss = require('./inline-css');
+const fileHelper = require('./file-helper');
 const getMeta = require('./get-meta');
 const config = require('./config');
 const version = require('./version');
@@ -46,6 +47,8 @@ Version: \x1b[36m${newversion}\x1b[0m`);
 }
 
 function buildTree(filePath, parentPath) {
+  filePath = fileHelper.normalizeFileName(filePath);
+
   // Get file name
   if (parentPath) {
     filePath = path.join(parentPath, '..', filePath);
@@ -75,7 +78,7 @@ function buildTree(filePath, parentPath) {
   });
 
   if (/\.css$/g.test(filePath)) {
-    css.push({ file, filePath: filePath.split('\\').join('/') });
+    css.push({file, filePath: filePath.split('\\').join('/')});
   } else {
     files.push({
       file: file
@@ -99,11 +102,13 @@ function getOutFile(addFilePathComments) {
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
 
   files.forEach(file => {
-    console.log(`${file.filePath.replace(/^\.\//g, '')}`);
+    const filePath = file.filePath.replace(/^\.\//g, '');
+
+    console.log(`${filePath}`);
     out += os.EOL + os.EOL;
 
     if (addFilePathComments) {
-      out += `// ${file.filePath.replace(/^\.\//g, '')}${os.EOL}`;
+      out += `// ${filePath}${os.EOL}`;
     }
 
     out += file.file;
