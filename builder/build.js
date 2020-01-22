@@ -46,25 +46,40 @@ Version: \x1b[36m${newversion}\x1b[0m`);
   }
 }
 
-function buildTree(filePath, parentPath) {
-  filePath = fileHelper.normalizeFileName(filePath);
+function getExistingFilePath(filePath, normalizedFilePath, parentPath) {
+  if (fs.existsSync(filePath)) {
+    return filePath;
+  }
 
-  // Get file name
+  if (fs.existsSync(normalizedFilePath)) {
+    return normalizedFilePath;
+  }
+
+  throw new Error(`${parentPath} tries to import unreachable file ${filePath}`);
+}
+
+function buildTree(filePath, parentPath) {
+  // Get full file name
   if (parentPath) {
     filePath = path.join(parentPath, '..', filePath);
   }
 
-  if (visited.includes(filePath)) {
+  const normalizedFilePath = fileHelper.normalizeFileName(filePath);
+
+  if (visited.includes(filePath) || visited.includes(normalizedFilePath)) {
+    // file processed
     return;
   }
 
-  // Put file name into visited
-  visited.push(filePath);
+  filePath = getExistingFilePath(filePath, normalizedFilePath, parentPath);
 
   // Open file
-  const file = fs.readFileSync(filePath).toString();
   const importRegex = /^[\t\r ]*import.+['"];$/gm;
   const imports = [];
+  const file = fs.readFileSync(filePath).toString();
+
+  // Put file name into visited
+  visited.push(filePath);
 
   // Get all imports
   let matches;
