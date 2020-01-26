@@ -229,6 +229,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
+0.1.6 - Default file extension .js is used if extension is not defined into import line
+
 0.1.5 - Remove source path comments in code built in release mode
 
 0.1.4 - Remove leading dot for entry file
