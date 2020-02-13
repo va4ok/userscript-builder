@@ -44,8 +44,8 @@
       "match": "*://*.*",
       "grant": "none",
       "require": [
-        "https://unpkg.com/react@16/umd/react.production.min.js",
-        "https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"
+        "https://some.url.1",
+        "https://some.url.2"
       ]
     }
   }
