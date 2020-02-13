@@ -99,7 +99,7 @@ function buildTree(filePath, parentPath) {
       file: file
         .split(importRegex)
         .join('')
-        .split(/^export /gm) // TODO use one split
+        .split(/^(?:export default )|(?:export )/gm) // TODO use one split
         .join('')
         .trim(),
       filePath: filePath.split('\\').join('/')
