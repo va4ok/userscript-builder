@@ -34,8 +34,8 @@ Update Your package.json with userscript section
       "match": "*://*.*",
       "grant": "none",
       "require": [
-        "src1",
-        "src2"
+        "https://some.url.1",
+        "https://some.url.2"
       ]
     }
   }
@@ -165,8 +165,8 @@ Build your user script and publish on https://openuserjs.org
 // @source       git+https://github.com/va4ok/userscript-builder.git
 // @license      MIT
 // @homepage     https://openuserjs.org/scripts/va4ok
-// @require      src1
-// @require      src1
+// @require      https://some.url.1
+// @require      https://some.url.2
 // ==/UserScript==
 
 // src/static-class/static-class.js
