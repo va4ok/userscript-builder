@@ -32,7 +32,11 @@ Update Your package.json with userscript section
       "namespace": "http://tampermonkey.net/",
       "homepage": "https://openuserjs.org/scripts/va4ok",
       "match": "*://*.*",
-      "grant": "none"
+      "grant": "none",
+      "require": [
+        "src1",
+        "src2"
+      ]
     }
   }
 }
@@ -161,6 +165,8 @@ Build your user script and publish on https://openuserjs.org
 // @source       git+https://github.com/va4ok/userscript-builder.git
 // @license      MIT
 // @homepage     https://openuserjs.org/scripts/va4ok
+// @require      src1
+// @require      src1
 // ==/UserScript==
 
 // src/static-class/static-class.js
@@ -228,6 +234,8 @@ Not implemented yet.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## History
+
+0.2.0 - Support for arrays of meta values
 
 0.1.6 - Default file extension .js is used if extension is not defined into import line
 
