@@ -14,7 +14,11 @@ function getMeta() {
   result += '// ==UserScript==' + os.EOL;
 
   for (let [key, value] of Object.entries(config.meta)) {
-    result += `${formatCommentString(key, value, length)}${os.EOL}`
+    if (Array.isArray(value)) {
+      value.forEach(val => result += `${formatCommentString(key, val, length)}${os.EOL}`);
+    } else {
+      result += `${formatCommentString(key, value, length)}${os.EOL}`;
+    }
   }
 
   result += '// ==/UserScript==';
