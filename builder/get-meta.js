@@ -16,7 +16,7 @@ function getMeta() {
   for (let [key, value] of Object.entries(config.meta)) {
     if (Array.isArray(value)) {
       value.forEach(val => result += `${formatCommentString(key, val, length)}${os.EOL}`);
-    } else {
+    } else if (value !== '') {
       result += `${formatCommentString(key, value, length)}${os.EOL}`;
     }
   }

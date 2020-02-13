@@ -235,6 +235,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
+0.3.0 - Skip empty meta info.
+
 0.2.0 - Support for arrays of meta values
 
 0.1.6 - Default file extension .js is used if extension is not defined into import line
