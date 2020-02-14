@@ -5,42 +5,47 @@ const os = require('os');
 const minimist = require('minimist');
 
 const inlineCss = require('./inline-css');
+const prepareJs = require('./prepare-js');
 const fileHelper = require('./file-helper');
 const getMeta = require('./get-meta');
 const config = require('./config');
 const version = require('./version');
 
-const files = [];
-const css = [];
-const visited = [];
+const files = {
+  js: [],
+  css: [],
+  visited: []
+};
 
-function build() {
-  const argv = minimist(process.argv.slice(2));
-  const newversion = version.increase(config.meta.version, argv['mode']);
-  const isRelease = newversion !== config.meta.version;
+function createFolderAndFile(isRelease) {
   const outFolder = path.join(process.cwd(), isRelease ? config.release : config.dev);
-
-  console.log(`Build in ${isRelease ? 'release-' : ''}${argv['mode']} mode`);
+  const outFileName = path.join(outFolder, `${config.fileName}.user.js`);
 
   if (!fs.existsSync(outFolder)) {
     fs.mkdirSync(outFolder);
   }
 
-  const outFileName = path.join(outFolder, `${config.fileName}.user.js`);
-
   if (fs.existsSync(outFileName)) {
     fs.unlinkSync(outFileName);
   }
 
-  config.meta.version = newversion;
+  return outFileName;
+}
 
+function build() {
+  const argv = minimist(process.argv.slice(2));
+  const newversion = version.increase(config.meta.version, argv['mode']);
+  const isRelease = newversion !== config.meta.version;
+
+  console.log(`Build in ${isRelease ? 'release-' : ''}${argv['mode']} mode`);
+
+  config.meta.version = newversion;
   buildTree(config.entry);
-  fs.writeFileSync(outFileName, getOutFile(!isRelease));
+  fs.writeFileSync(createFolderAndFile(isRelease), getOutFile(!isRelease));
 
   if (isRelease) {
     version.save(newversion);
-    console.log(`Build finished 
-Version: \x1b[36m${newversion}\x1b[0m`);
+    console.log(`Build finished${os.EOL}Version: \x1b[36m${newversion}\x1b[0m`);
   } else {
     console.log('Build finished');
   }
@@ -66,49 +71,42 @@ function buildTree(filePath, parentPath) {
 
   const normalizedFilePath = fileHelper.normalizeFileName(filePath);
 
-  if (visited.includes(filePath) || visited.includes(normalizedFilePath)) {
-    // file processed
+  if (isFileProcessed(filePath, normalizedFilePath)) {
     return;
   }
 
   filePath = getExistingFilePath(filePath, normalizedFilePath, parentPath);
 
-  // Open file
+  const file = fs.readFileSync(filePath).toString();
+  // Mark file as processed
+  files.visited.push(filePath);
+  getImports(file).forEach(imprt => buildTree(imprt, filePath));
+
+  if (/\.css$/g.test(filePath)) {
+    files.css.push({file, filePath: fileHelper.revertSlashes(filePath)});
+  } else {
+    files.js.push({file: prepareJs(file), filePath: fileHelper.revertSlashes(filePath)});
+  }
+}
+
+function isFileProcessed(filePath, normalizedFilePath) {
+  return files.visited.includes(filePath) || files.visited.includes(normalizedFilePath);
+}
+
+function getImports(file) {
   const importRegex = /^[\t\r ]*import.+['"];$/gm;
   const imports = [];
-  const file = fs.readFileSync(filePath).toString();
-
-  // Put file name into visited
-  visited.push(filePath);
-
-  // Get all imports
   let matches;
 
   while ((matches = importRegex.exec(file)) !== null) {
     imports.push(getImportPath(matches[0]));
   }
 
-  imports.forEach(imrt => {
-    buildTree(imrt, filePath);
-  });
-
-  if (/\.css$/g.test(filePath)) {
-    css.push({file, filePath: filePath.split('\\').join('/')});
-  } else {
-    files.push({
-      file: file
-        .split(importRegex)
-        .join('')
-        .split(/^(?:export default )|(?:export )/gm) // TODO use one split
-        .join('')
-        .trim(),
-      filePath: filePath.split('\\').join('/')
-    });
-  }
+  return imports;
 }
 
-function getImportPath(_import) {
-  return _import.split(/['"]/g)[1];
+function getImportPath(imprt) {
+  return imprt.split(/['"]/g)[1];
 }
 
 function getOutFile(addFilePathComments) {
@@ -116,7 +114,7 @@ function getOutFile(addFilePathComments) {
 
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
 
-  files.forEach(file => {
+  files.js.forEach(file => {
     const filePath = file.filePath.replace(/^\.\//g, '');
 
     console.log(`${filePath}`);
@@ -129,9 +127,9 @@ function getOutFile(addFilePathComments) {
     out += file.file;
   });
 
-  if (css.length) {
+  if (files.css.length) {
     console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
-    out += inlineCss(css, addFilePathComments, filePath => console.log(filePath));
+    out += inlineCss(files.css, addFilePathComments, filePath => console.log(filePath));
   }
 
   return out;

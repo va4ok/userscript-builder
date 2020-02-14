@@ -1,5 +1,7 @@
+import NotificatorConsole from "./notificatorConsole";
+
 export class Notificator {
   static notify(text) {
-    console.log('Notificator says: ' + text);
+    new NotificatorConsole().log('Notificator says: ' + text);
   }
 }

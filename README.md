@@ -2,6 +2,8 @@
 
 Simple tool for building userscript for tampermonkey.
 
+ES6 modules are not supported.
+
 * Simple configuration.
 * Uses ES6 classes syntax.
 * Support css files.
