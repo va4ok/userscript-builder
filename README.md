@@ -237,10 +237,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
-0.3.0 - Skip empty meta info.
+**0.3.0 - Skip empty meta info.
 Remove ```git+``` from source.
 Remove ```default``` keyword in class declaration.
-Remove code comments in release mode.
+Remove code comments in release mode.**
 
 0.2.0 - Support for arrays of meta values
 
