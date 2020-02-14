@@ -16,7 +16,11 @@ function getMeta() {
   for (let [key, value] of Object.entries(config.meta)) {
     if (Array.isArray(value)) {
       value.forEach(val => result += `${formatCommentString(key, val, length)}${os.EOL}`);
-    } else {
+    } else if (value !== '') {
+      if (key === 'source') {
+        value = value.replace(/^git\+https/, 'https');
+      }
+
       result += `${formatCommentString(key, value, length)}${os.EOL}`;
     }
   }

@@ -1,5 +1,5 @@
 import { Notificator } from "./notificator/notificator.js";
-import { SayHello } from "./say-hello/say-hello";
+import SayHello from './say-hello/say-hello';
 
 (function () {
   Notificator.notify('creating John and Mark');

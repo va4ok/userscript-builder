@@ -1,6 +1,6 @@
 {
   "name": "userscript-builder",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tool for building userscript for teampermonkey.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
@@ -46,7 +46,8 @@
       "require": [
         "https://some.url.1",
         "https://some.url.2"
-      ]
+      ],
+      "emptyValue": ""
     }
   }
 }

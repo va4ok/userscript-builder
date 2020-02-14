@@ -41,4 +41,8 @@ function normalizeFileName(filePath) {
   return filePath + '.js';
 }
 
-module.exports = {normalizeFileName};
+function revertSlashes(filePath) {
+  return filePath.split('\\').join('/');
+}
+
+module.exports = {normalizeFileName, revertSlashes};
