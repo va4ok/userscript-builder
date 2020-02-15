@@ -239,7 +239,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
-**0.3.0 - Minor changes:**
+**0.4.0 - Stability**
+* Add jest test framework
+* Cover code with jest
+
+0.3.0 - Minor changes:
 * Skip empty meta info.
 * Remove ```git+``` from source.
 * Remove ```default``` keyword in class declaration.
