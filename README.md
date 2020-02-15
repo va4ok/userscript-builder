@@ -221,7 +221,9 @@ let notificator;
 
 ## Running the tests
 
-Not implemented yet.
+```bash
+npm run test
+```
 
 ## Built With
 
