@@ -2,40 +2,52 @@
 const fs = require('fs');
 const path = require('path');
 
-function increase(version, position) {
-  if (!Number.isInteger(position)) {
-    switch (position.toLowerCase()) {
-      case 'major':
-      case 'maj':
-        position = 0;
-        break;
+/**
+ * Return position in version according build mode
+ * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
+ * @returns {number}
+ */
+function getPositionByBuildMode(buildMode) {
+  switch (buildMode.toLowerCase()) {
+    case 'major':
+    case 'maj':
+      return 0;
+    case 'minor':
+    case 'min':
+      return 1;
+    case 'bugfix':
+    case 'bug':
+      return 2;
+    default:
+      return -1;
+  }
+}
 
-      case 'minor':
-      case 'min':
-        position = 1;
-        break;
+/**
+ * Increase 3 number version according build mode
+ * @param {string} version
+ * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
+ * @returns {string}
+ */
+function increase(version, buildMode) {
+  const position = getPositionByBuildMode(buildMode);
 
-      case 'bugfix':
-      case 'bug':
-        position = 2;
-        break;
-
-      default:
-        return version;
-    }
+  if (position === -1) {
+    return version;
   }
 
   return version
     .split('.')
     .map((value, index) => {
+      let result = parseInt(value);
+
       if (index === position) {
-        value = parseInt(value);
-        value++;
+        result++;
       } else if (index > position) {
-        value = 0;
+        result = 0;
       }
 
-      return value;
+      return result;
     })
     .join('.');
 }
@@ -49,4 +61,4 @@ function save(version) {
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 }
 
-module.exports = {increase, save};
+module.exports = { increase, save };
