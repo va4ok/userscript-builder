@@ -1,4 +1,3 @@
-// __mocks__/fs.js
 'use strict';
 
 const path = require('path');
