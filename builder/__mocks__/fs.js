@@ -25,4 +25,8 @@ function writeFileSync(filePath, file) {
   mockFiles[filePath] = file;
 }
 
-module.exports = { __setMockFiles, readdirSync, writeFileSync };
+fs.__setMockFiles = __setMockFiles;
+fs.readdirSync = readdirSync;
+fs.writeFileSync = writeFileSync;
+
+module.exports = fs;
