@@ -9,7 +9,8 @@ const prepareJs = require('./prepare-js');
 const fileHelper = require('./file-helper');
 const getMeta = require('./get-meta');
 const config = require('./config');
-const version = require('./version');
+const increaseVersion = require('./increase-version');
+const updatePackageJson = require('./update-package-json');
 
 const files = {
   js: [],
@@ -34,7 +35,7 @@ function createFolderAndFile(isRelease) {
 
 function build() {
   const argv = minimist(process.argv.slice(2));
-  const newversion = version.increase(config.meta.version, argv['mode']);
+  const newversion = increaseVersion(config.meta.version, argv['mode']);
   const isRelease = newversion !== config.meta.version;
 
   console.log(`Build in ${isRelease ? 'release-' : ''}${argv['mode']} mode`);
@@ -44,7 +45,7 @@ function build() {
   fs.writeFileSync(createFolderAndFile(isRelease), getOutFile(!isRelease));
 
   if (isRelease) {
-    version.save(newversion);
+    updatePackageJson({version: newversion});
     console.log(`Build finished${os.EOL}Version: \x1b[36m${newversion}\x1b[0m`);
   } else {
     console.log('Build finished');
