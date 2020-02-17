@@ -1,6 +1,4 @@
 'use strict';
-const fs = require('fs');
-const path = require('path');
 
 /**
  * Return position in version according build mode
@@ -52,13 +50,4 @@ function increase(version, buildMode) {
     .join('.');
 }
 
-function save(version) {
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
-  const packageJson = require(packageJsonPath);
-
-  packageJson.version = version;
-
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-}
-
-module.exports = { increase, save };
+module.exports = increase;
