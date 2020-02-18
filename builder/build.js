@@ -10,7 +10,7 @@ const fileHelper = require('./file-helper');
 const getMeta = require('./get-meta');
 const config = require('./config');
 const increaseVersion = require('./increase-version');
-const updatePackageJson = require('./update-package-json');
+const updatePackageJson = require('./update-project-package');
 
 const files = {
   js: [],

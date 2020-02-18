@@ -29,4 +29,6 @@ fs.__setMockFiles = __setMockFiles;
 fs.readdirSync = readdirSync;
 fs.writeFileSync = writeFileSync;
 
+jest.spyOn(fs, 'writeFileSync');
+
 module.exports = fs;
