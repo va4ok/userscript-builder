@@ -6,7 +6,7 @@ const minimist = require('minimist');
 
 const inlineCss = require('./inline-css');
 const prepareJs = require('./prepare-js');
-const fileHelper = require('./file-helper');
+const fileHelper = require('./file-name');
 const getMeta = require('./get-meta');
 const config = require('./config');
 const increaseVersion = require('./increase-version');
