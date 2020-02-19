@@ -164,7 +164,7 @@ Build your user script and publish on https://openuserjs.org
 // @author       va4ok
 // @match        *://*.*
 // @grant        none
-// @source       git+https://github.com/va4ok/userscript-builder.git
+// @source       https://github.com/va4ok/userscript-builder.git
 // @license      MIT
 // @homepage     https://openuserjs.org/scripts/va4ok
 // @require      https://some.url.1
