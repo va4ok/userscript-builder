@@ -1,3 +1,5 @@
+'use strict';
+
 jest.mock('fs');
 const uPJ = require('../update-project-package');
 const fs = require('fs');
