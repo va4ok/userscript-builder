@@ -1,24 +1,32 @@
 'use strict';
+
 const os = require('os');
 
-const config = require('./config');
-
-function getMeta() {
+/**
+ * Format meta from object
+ * @param {Object} meta - meta object properties simple value or array
+ * @returns {string}
+ */
+function formatMeta(meta) {
   let length = 0;
   let result = '';
 
-  for (let key of Object.keys(config.meta)) {
+  if (!meta) {
+    return '';
+  }
+
+  for (let key of Object.keys(meta)) {
     length = key.length > length ? key.length : length;
   }
 
   result += '// ==UserScript==' + os.EOL;
 
-  for (let [key, value] of Object.entries(config.meta)) {
+  for (let [key, value] of Object.entries(meta)) {
     if (Array.isArray(value)) {
       value.forEach(val => result += `${formatCommentString(key, val, length)}${os.EOL}`);
     } else if (value !== '') {
       if (key === 'source') {
-        value = value.replace(/^git\+https/, 'https');
+        value = value.replace(/^git\+http/, 'http');
       }
 
       result += `${formatCommentString(key, value, length)}${os.EOL}`;
@@ -30,6 +38,13 @@ function getMeta() {
   return result;
 }
 
+/**
+ * Return meta property string filled with whitespaces
+ * @param {string} prop
+ * @param {string} val
+ * @param {number} length
+ * @returns {string}
+ */
 function formatCommentString(prop, val, length) {
   if (prop.length < length) {
     const spacer = new Array(length - prop.length).fill(' ');
@@ -39,4 +54,4 @@ function formatCommentString(prop, val, length) {
   return `// @${prop}  ${val}`;
 }
 
-module.exports = getMeta;
+module.exports = formatMeta;

@@ -8,7 +8,7 @@ const concatCss = require('./concat-css');
 const cssInJs = require('./css-in-js');
 const prepareJs = require('./prepare-js');
 const fileHelper = require('./file-name');
-const getMeta = require('./get-meta');
+const formatMeta = require('./format-meta');
 const config = require('./config');
 const increaseVersion = require('./increase-version');
 const updatePackageJson = require('./update-project-package');
@@ -46,7 +46,7 @@ function build() {
   fs.writeFileSync(createFolderAndFile(isRelease), getOutFile(!isRelease));
 
   if (isRelease) {
-    updatePackageJson({version: newversion});
+    updatePackageJson({ version: newversion });
     console.log(`Build finished${os.EOL}Version: \x1b[36m${newversion}\x1b[0m`);
   } else {
     console.log('Build finished');
@@ -85,9 +85,9 @@ function buildTree(filePath, parentPath) {
   getImports(file).forEach(imprt => buildTree(imprt, filePath));
 
   if (/\.css$/g.test(filePath)) {
-    files.css.push({file, filePath: fileHelper.revertSlashes(filePath)});
+    files.css.push({ file, filePath: fileHelper.revertSlashes(filePath) });
   } else {
-    files.js.push({file: prepareJs(file), filePath: fileHelper.revertSlashes(filePath)});
+    files.js.push({ file: prepareJs(file), filePath: fileHelper.revertSlashes(filePath) });
   }
 }
 
@@ -112,7 +112,7 @@ function getImportPath(imprt) {
 }
 
 function getOutFile(addFilePathComments) {
-  let out = getMeta();
+  let out = formatMeta(config.meta);
 
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
 

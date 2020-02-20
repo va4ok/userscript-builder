@@ -1,4 +1,5 @@
 'use strict';
+
 const defaults = require('./defaults');
 const path = require('path');
 
