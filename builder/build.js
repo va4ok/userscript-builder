@@ -5,6 +5,7 @@ const os = require('os');
 const minimist = require('minimist');
 
 const concatCss = require('./concat-css');
+const cssInJs = require('./css-in-js');
 const prepareJs = require('./prepare-js');
 const fileHelper = require('./file-name');
 const getMeta = require('./get-meta');
@@ -130,7 +131,8 @@ function getOutFile(addFilePathComments) {
 
   if (files.css.length) {
     console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
-    out += concatCss(files.css, addFilePathComments, filePath => console.log(filePath));
+    const concatenatedCss = concatCss(files.css, addFilePathComments, filePath => console.log(filePath));
+    out += `${os.EOL}${os.EOL}${cssInJs(concatenatedCss, addFilePathComments)}`;
   }
 
   return out;
