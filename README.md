@@ -17,7 +17,7 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 
 Update Your package.json with userscript section
 
-```bash
+```javascript
 {
   "name": "git-name",
   "version": "0.0.0",
@@ -48,7 +48,7 @@ Fields version, description, author, license will be used in output meta.
 
 Default properties if not specified
 
-```bash
+```
   entry: './src/index.js',
   dev: './dist',
   release: './release',
@@ -73,13 +73,13 @@ It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
 
 Install with npm:
 
-```bash
+```
 npm install --save-dev userscript-builder
 ```
 
 Install with yarn:
 
-```bash
+```
 yarn add userscript-builder --dev
 ```
 
@@ -87,35 +87,35 @@ yarn add userscript-builder --dev
 
 Dev - no version changes
 
-```bash
+```
 npm run userscript-builder --mode dev
-or
+# or
 npm run userscript-builder
 ```
 
 Release-bugfix - bugfix version will increase and commited into package.json file
 
-```bash
+```
 npm run userscript-builder --mode bugfix
-or
+# or
 npm run userscript-builder --mode bug
 2.7.1 -> 2.7.2
 ```
 
 Release-minor - minor version will increase and commited into package.json file
 
-```bash
+```
 npm run userscript-builder --mode minor
-or
+# or
 npm run userscript-builder --mode min
 2.7.1 -> 2.8.0
 ```
 
 Release-major - major version will increase and commited into package.json file
 
-```bash
+```
 npm run userscript-builder --mode major
-or
+# or
 npm run userscript-builder --mode maj
 2.7.1 -> 3.0.0
 ```
@@ -124,7 +124,7 @@ npm run userscript-builder --mode maj
 
 Create your entry file with selfexecuted function
 
-```bash
+```javascript
 import { Class1 } from './class1/class1.js';
 import { StaticClass } from './static-class/static-class.js';
 
@@ -140,7 +140,7 @@ import { StaticClass } from './static-class/static-class.js';
 
 Use ES6 classes and imports to organize you code.
 
-```bash
+```javascript
 import { StaticClass } from './../static-class/static-class.js';
 import './class1.css';
 
@@ -155,7 +155,7 @@ const CLASS1_CONST = 200;
 
 Build your user script and publish on https://openuserjs.org
 
-```bash
+```javascript
 // ==UserScript==
 // @name         User script name
 // @namespace    http://tampermonkey.net/
