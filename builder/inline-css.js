@@ -21,7 +21,14 @@ ${ addFilePathComments ? '// CSS injection' + os.EOL : ''}(function(){
   const $style = document.createElement('style');
 
   $style.innerHTML = \`${css}\`;
-  document.body.appendChild($style);
+  switch (document.readyState) {
+    case "complete": case "interactive":
+      document.body.appendChild($style);
+      break;
+    default:
+      window.addEventListener("DOMContentLoaded", () => { document.body.appendChild($style); });
+      break;
+  }
 })();`;
 }
 
