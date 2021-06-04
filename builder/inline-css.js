@@ -10,8 +10,8 @@ function inlineCss(cssArray, addFilePathComments, onFileProgress) {
     if (addFilePathComments) {
       css += `/* ${element.filePath} */${os.EOL}`;
     }
-
-    css += element.file;
+    let e = element.file.replace(/\\([a-f]|[A-F]|[0-9]){2,4}/g, '\\$&')
+    css += e;
     onFileProgress(element.filePath);
   });
 
