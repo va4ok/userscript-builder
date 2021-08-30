@@ -7,7 +7,8 @@ const os = require('os');
  * @param {boolean} addFilePathComments
  * @param {function} onFileProcessed
  */
-function concatCss(cssArray, addFilePathComments, onFileProcessed = ()=>{}) {
+function concatCss(cssArray, addFilePathComments, onFileProcessed = () => {
+}) {
   let css = '';
 
   cssArray.forEach((element, index) => {
@@ -17,7 +18,9 @@ function concatCss(cssArray, addFilePathComments, onFileProcessed = ()=>{}) {
       css += `/* ${element.filePath} */${os.EOL}`;
     }
 
-    css += element.file;
+    const safeCss = element.file.replace(/\\([a-f]|[A-F]|[0-9]){2,4}/g, '\\$&');
+
+    css += safeCss;
     onFileProcessed(element.filePath);
   });
 
