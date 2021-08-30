@@ -10,7 +10,15 @@ describe('css files concat', () => {
   const $style = document.createElement('style');
 
   $style.innerHTML = \`.style-rule{ padding: 0; }\`;
-  document.body.appendChild($style);
+
+  if (document.readyState === 'complete' ||
+      document.readyState === 'interactive') {
+    document.body.appendChild($style);
+  } else {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.appendChild($style);
+    });
+  }
 })();`;
 
     expect(cssInJs(input, true)).toBe(output);
@@ -23,7 +31,15 @@ describe('css files concat', () => {
   const $style = document.createElement('style');
 
   $style.innerHTML = \`.style-rule{ padding: 0; }\`;
-  document.body.appendChild($style);
+
+  if (document.readyState === 'complete' ||
+      document.readyState === 'interactive') {
+    document.body.appendChild($style);
+  } else {
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.appendChild($style);
+    });
+  }
 })();`;
 
     expect(cssInJs(input, false)).toBe(output);
