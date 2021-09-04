@@ -1,7 +1,5 @@
 'use strict';
 
-jest.mock('process');
-
 describe('config', () => {
   test('userscript section in package.json', () => {
     const prepareConfig = require('../prepare-config');
