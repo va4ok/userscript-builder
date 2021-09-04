@@ -1,27 +1,23 @@
 'use strict';
-
 const defaults = require('./defaults');
-const path = require('path');
 
-function init() {
-  let packageJson;
-  let config = null;
+const prepareConfig = (packageJson) => {
+  let config;
 
-  try {
-    packageJson = require(path.join(process.cwd(), 'package'));
-  } catch (e) {
-    console.log('package.json wasn\'t found. Default parameters will be used.');
-    console.error(e);
-  }
-
-  // default -> package -> userscript
+// default -> package -> userscript
   if (packageJson) {
+    let source = '';
+
+    if (packageJson.repository) {
+      source = packageJson.repository.url !== undefined ? packageJson.repository.url : packageJson.repository
+    }
+
     const meta = {
       name: packageJson.name,
       version: packageJson.version,
       description: packageJson.description,
       author: packageJson.author,
-      source: packageJson.repository ? (packageJson.repository.url ? packageJson.repository.url : packageJson.repository) : '',
+      source,
       license: packageJson.license
     };
 
@@ -36,7 +32,7 @@ function init() {
     config = {...defaults.config, meta: defaults.meta};
   }
 
-  module.exports = config;
-}
+  return config;
+};
 
-init();
+module.exports = prepareConfig;

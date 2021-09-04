@@ -9,7 +9,7 @@ const cssInJs = require('./css-in-js');
 const prepareJs = require('./prepare-js');
 const fileHelper = require('./file-name');
 const formatMeta = require('./format-meta');
-const config = require('./config');
+const prepareConfig = require('./prepare-config');
 const increaseVersion = require('./increase-version');
 const updatePackageJson = require('./update-project-package');
 
@@ -18,6 +18,17 @@ const files = {
   css: [],
   visited: []
 };
+
+let packageJson;
+
+try {
+  packageJson = require(path.join(process.cwd(), 'package'));
+} catch (e) {
+  console.log('package.json wasn\'t found. Default parameters will be used.');
+  console.error(e);
+}
+
+const config = prepareConfig(packageJson);
 
 function createFolderAndFile(isRelease) {
   const outFolder = path.join(process.cwd(), isRelease ? config.release : config.dev);

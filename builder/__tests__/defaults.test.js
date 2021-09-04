@@ -20,10 +20,10 @@ const meta = {
 
 describe('Default values', () => {
   test('config', () => {
-    expect(defaults.config).toEqual(config);
+    expect(defaults.config).toStrictEqual(config);
   });
 
   test('meta', () => {
-    expect(defaults.meta).toEqual(meta);
+    expect(defaults.meta).toStrictEqual(meta);
   });
 });
