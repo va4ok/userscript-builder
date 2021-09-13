@@ -1,17 +1,14 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
+
 const minimist = require('minimist');
 
-const concatCss = require('./concat-css');
-const cssInJs = require('./css-in-js');
 const prepareJs = require('./prepare-js');
-const fileHelper = require('./file-name');
-const formatMeta = require('./format-meta');
-const prepareConfig = require('./prepare-config');
+const fileName = require('./file-name');
 const increaseVersion = require('./increase-version');
 const updatePackageJson = require('./update-project-package');
+const utils = require('./utils');
 
 const files = {
   js: [],
@@ -19,86 +16,29 @@ const files = {
   visited: []
 };
 
-let packageJson;
-
-try {
-  packageJson = require(path.join(process.cwd(), 'package'));
-} catch (e) {
-  console.log('package.json wasn\'t found. Default parameters will be used.');
-  console.error(e);
-}
-
-const config = prepareConfig(packageJson);
-
-function createFolderAndFile(isRelease) {
-  const outFolder = path.join(process.cwd(), isRelease ? config.release : config.dev);
-  const outFileName = path.join(outFolder, `${config.fileName}.user.js`);
-
-  if (!fs.existsSync(outFolder)) {
-    fs.mkdirSync(outFolder);
-  }
-
-  if (fs.existsSync(outFileName)) {
-    fs.unlinkSync(outFileName);
-  }
-
-  return outFileName;
-}
-
-function build() {
-  const argv = minimist(process.argv.slice(2));
-  const newversion = increaseVersion(config.meta.version, argv['mode']);
-  const isRelease = newversion !== config.meta.version;
-
-  console.log(`Build in ${isRelease ? 'release-' : ''}${argv['mode']} mode`);
-
-  config.meta.version = newversion;
-  buildTree(config.entry);
-  fs.writeFileSync(createFolderAndFile(isRelease), getOutFile(!isRelease));
-
-  if (isRelease) {
-    updatePackageJson({ version: newversion });
-    console.log(`Build finished${os.EOL}Version: \x1b[36m${newversion}\x1b[0m`);
-  } else {
-    console.log('Build finished');
-  }
-}
-
-function getExistingFilePath(filePath, normalizedFilePath, parentPath) {
-  if (fs.existsSync(filePath)) {
-    return filePath;
-  }
-
-  if (fs.existsSync(normalizedFilePath)) {
-    return normalizedFilePath;
-  }
-
-  throw new Error(`${parentPath} tries to import unreachable file ${filePath}`);
-}
-
 function buildTree(filePath, parentPath) {
   // Get full file name
   if (parentPath) {
     filePath = path.join(parentPath, '..', filePath);
   }
 
-  const normalizedFilePath = fileHelper.normalizeFileName(filePath);
+  const normalizedFilePath = fileName.normalizeFileName(filePath);
 
   if (isFileProcessed(filePath, normalizedFilePath)) {
     return;
   }
 
-  filePath = getExistingFilePath(filePath, normalizedFilePath, parentPath);
+  filePath = utils.getExistingFilePath(filePath, normalizedFilePath, parentPath);
 
   const file = fs.readFileSync(filePath).toString();
   // Mark file as processed
   files.visited.push(filePath);
-  getImports(file).forEach(imprt => buildTree(imprt, filePath));
+  utils.getImports(file).forEach(imprt => buildTree(imprt, filePath));
 
   if (/\.css$/g.test(filePath)) {
-    files.css.push({ file, filePath: fileHelper.revertSlashes(filePath) });
+    files.css.push({file, filePath: fileName.revertSlashes(filePath)});
   } else {
-    files.js.push({ file: prepareJs(file), filePath: fileHelper.revertSlashes(filePath) });
+    files.js.push({file: prepareJs(file), filePath: fileName.revertSlashes(filePath)});
   }
 }
 
@@ -106,47 +46,26 @@ function isFileProcessed(filePath, normalizedFilePath) {
   return files.visited.includes(filePath) || files.visited.includes(normalizedFilePath);
 }
 
-function getImports(file) {
-  const importRegex = /^[\t\r ]*import.+['"];$/gm;
-  const imports = [];
-  let matches;
+function build() {
+  const argv = minimist(process.argv.slice(2));
+  const config = utils.getConfig();
+  const newversion = increaseVersion(config.meta.version, argv['mode']);
+  const isRelease = newversion !== config.meta.version;
 
-  while ((matches = importRegex.exec(file)) !== null) {
-    imports.push(getImportPath(matches[0]));
+  utils.startBuildReport(isRelease, argv['mode']);
+
+  config.meta.version = newversion;
+  buildTree(config.entry);
+  fs.writeFileSync(
+    utils.createFolderAndFile(isRelease, config),
+    utils.concatFiles(!isRelease, files, config.meta)
+  );
+
+  if (isRelease) {
+    updatePackageJson({version: newversion});
   }
 
-  return imports;
-}
-
-function getImportPath(imprt) {
-  return imprt.split(/['"]/g)[1];
-}
-
-function getOutFile(addFilePathComments) {
-  let out = formatMeta(config.meta);
-
-  console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
-
-  files.js.forEach(file => {
-    const filePath = file.filePath.replace(/^\.\//g, '');
-
-    console.log(`${filePath}`);
-    out += os.EOL + os.EOL;
-
-    if (addFilePathComments) {
-      out += `// ${filePath}${os.EOL}`;
-    }
-
-    out += file.file;
-  });
-
-  if (files.css.length) {
-    console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
-    const concatenatedCss = concatCss(files.css, addFilePathComments, filePath => console.log(filePath));
-    out += `${os.EOL}${os.EOL}${cssInJs(concatenatedCss, addFilePathComments)}`;
-  }
-
-  return out;
+  utils.finishBuildReport(isRelease ? newversion : null);
 }
 
 module.exports = build;

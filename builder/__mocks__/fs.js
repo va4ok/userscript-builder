@@ -25,10 +25,16 @@ function writeFileSync(filePath, file) {
   mockFiles[filePath] = file;
 }
 
+function existsSync() {
+  return false;
+}
+
 fs.__setMockFiles = __setMockFiles;
 fs.readdirSync = readdirSync;
 fs.writeFileSync = writeFileSync;
+fs.existsSync = existsSync;
 
 jest.spyOn(fs, 'writeFileSync');
+jest.spyOn(fs, 'existsSync');
 
 module.exports = fs;

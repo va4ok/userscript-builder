@@ -4,10 +4,14 @@ jest.mock('fs');
 const uPJ = require('../update-project-package');
 const fs = require('fs');
 const path = require('path');
-
-fs.__setMockFiles('');
+const mockPackageJson = require('../__mocks__/mock-package.json');
 
 describe('Package json update', () => {
+  jest.mock(
+    path.join(process.cwd(), 'package.json'),
+    () => mockPackageJson
+  );
+
   uPJ({version: '7.7.7'});
 
   test('Path to save - <current working directory>/package.json', () => {
