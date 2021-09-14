@@ -109,7 +109,7 @@ describe('utils', () => {
     });
 
     test('remove existing file', () => {
-      fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(true);
+      fs.existsSync.mockReturnValue(true);
       utils.createFolderAndFile(false, config);
 
       expect(fs.unlinkSync).toHaveBeenCalledTimes(1);
@@ -128,7 +128,7 @@ describe('utils', () => {
     });
 
     test('keep existing folder', () => {
-      fs.existsSync.mockReturnValueOnce(true);
+      fs.existsSync.mockReturnValue(true);
       utils.createFolderAndFile(false, config);
 
       expect(fs.mkdirSync).not.toHaveBeenCalled();
@@ -147,7 +147,7 @@ describe('utils', () => {
     });
 
     test('if file path reachable', () => {
-      fs.existsSync.mockReturnValueOnce(true);
+      fs.existsSync.mockReturnValue(true);
 
       const result = utils.getExistingFilePath(
         filePath,
@@ -171,7 +171,7 @@ describe('utils', () => {
     });
 
     test('if file path and normalized file path are unreachable', () => {
-      fs.existsSync.mockReturnValueOnce(false).mockReturnValueOnce(false);
+      fs.existsSync.mockReturnValue(false);
 
       const result = () => {
         utils.getExistingFilePath(filePath, normalizedFilePath, parentPath);
@@ -330,6 +330,82 @@ describe('utils', () => {
 
       expect(console.log).toHaveBeenCalledTimes(1);
       expect(console.log).lastCalledWith(expectedMessage);
+    });
+  });
+
+  describe('buildTree', () => {
+    let files = {css: [], js: [], visited: []};
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+      jest.clearAllMocks();
+      files = {css: [], js: [], visited: []};
+    });
+
+    test('title test', () => {
+      const indexFile = {
+        file: 'export class IndexClass {}',
+        filePath: path.join(process.cwd(), './index.js')
+      };
+      const secondFile = {
+        file: 'export class SecondClass {}',
+        filePath: path.join(process.cwd(), './second/second')
+      };
+      const cssFile = {
+        file: '.hello {}',
+        filePath: path.join(process.cwd(), './second/second.css')
+      };
+
+      fs.existsSync.mockReturnValue(true);
+
+      fs.readFileSync
+        .mockReturnValueOnce(`import {SecondClass} from './second/second';
+        import './second/second.css';
+        export class IndexClass {}`)
+        .mockReturnValueOnce(`import './second.css';
+        export class SecondClass {}`)
+        .mockReturnValueOnce(`.hello {}`);
+
+      utils.buildTree(indexFile.filePath, null, files);
+
+      const expected = {
+        css: [
+          {file: cssFile.file, filePath: cssFile.filePath.split('\\').join('/')}
+        ],
+        js: [
+          {file: secondFile.file, filePath: secondFile.filePath.split('\\').join('/')},
+          {file: indexFile.file, filePath: indexFile.filePath.split('\\').join('/')}
+        ],
+        visited: [indexFile.filePath, secondFile.filePath, cssFile.filePath]
+      };
+
+      expect(files).toStrictEqual(expected);
+    });
+  });
+
+  describe('isFileProcessed', () => {
+    test('no visited list', () => {
+      const result = utils.isFileProcessed(null, 'filePath', 'normalizedFilePath');
+
+      expect(result).toBeFalsy();
+    });
+
+    test('no in visited list', () => {
+      const result = utils.isFileProcessed(['some_other-path'], 'filePath', 'normalizedFilePath');
+
+      expect(result).toBeFalsy();
+    });
+
+    test('filePath exists', () => {
+      const result = utils.isFileProcessed(['some_other-path', 'filePath'], 'filePath', 'normalizedFilePath');
+
+      expect(result).toBeTruthy();
+    });
+
+    test('normalizedFilePath exists', () => {
+      const result = utils.isFileProcessed(['some_other-path', 'normalizedFilePath'], 'filePath', 'normalizedFilePath');
+
+      expect(result).toBeTruthy();
     });
   });
 });

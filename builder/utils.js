@@ -6,6 +6,8 @@ const formatMeta = require('./format-meta');
 const concatCss = require('./concat-css');
 const cssInJs = require('./css-in-js');
 const prepareConfig = require('./prepare-config');
+const fileName = require("./file-name");
+const prepareJs = require("./prepare-js");
 
 function getConfig() {
   let packageJson;
@@ -111,6 +113,40 @@ function finishBuildReport(version) {
   console.log(message.join(os.EOL));
 }
 
+// TODO replace with pure function
+function buildTree(filePath, parentPath, files) {
+  // Get full file name
+  if (parentPath) {
+    filePath = path.join(parentPath, '..', filePath);
+  }
+
+  const normalizedFilePath = fileName.normalizeFileName(filePath);
+
+  if (isFileProcessed(files.visited, filePath, normalizedFilePath)) {
+    return;
+  }
+
+  filePath = getExistingFilePath(filePath, normalizedFilePath, parentPath);
+
+  const file = fs.readFileSync(filePath).toString();
+  // Mark file as processed
+  files.visited.push(filePath);
+  getImports(file).forEach(imprt => buildTree(imprt, filePath, files));
+
+  if (/\.css$/g.test(filePath)) {
+    files.css.push({file, filePath: fileName.revertSlashes(filePath)});
+  } else {
+    files.js.push({file: prepareJs(file), filePath: fileName.revertSlashes(filePath)});
+  }
+}
+
+function isFileProcessed(visited, filePath, normalizedFilePath) {
+  visited = visited || [];
+
+  return visited.includes(filePath) ||
+    visited.includes(normalizedFilePath);
+}
+
 module.exports = {
   getConfig,
   createFolderAndFile,
@@ -119,4 +155,6 @@ module.exports = {
   concatFiles,
   startBuildReport,
   finishBuildReport,
+  buildTree,
+  isFileProcessed
 };
