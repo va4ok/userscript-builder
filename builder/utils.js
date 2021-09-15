@@ -15,8 +15,8 @@ function getConfig() {
   try {
     packageJson = require(path.join(process.cwd(), 'package.json'));
   } catch (e) {
-    console.warn("package.json wasn't found. Default parameters will be used.");
-    console.error(e);
+    console.warn("\x1b[1;33m%s\x1b[0m", "package.json wasn't found. Default parameters will be used.");
+    console.log('For details please see getting-started section in README.md');
   }
 
   return prepareConfig(packageJson);
@@ -49,7 +49,16 @@ function getExistingFilePath(filePath, normalizedFilePath, parentPath) {
     return normalizedFilePath;
   }
 
-  throw new Error(`${parentPath} tries to import unreachable file ${filePath}`);
+  let errorMessage;
+
+  if (parentPath) {
+    errorMessage = `${parentPath} tries to import unreachable file ${filePath}`;
+  } else {
+    errorMessage = 'Can not reach root script file: ' + path.join(process.cwd(), filePath);
+  }
+
+  console.error('\x1b[1;31m%s\x1b[0m', errorMessage);
+  throw new Error('Unreachable file');
 }
 
 function getImportPath(imprt) {
@@ -104,12 +113,13 @@ function startBuildReport(isRelease, mode) {
 }
 
 function finishBuildReport(version) {
-  let message = ['Build finished'];
+  const message = [];
 
   if (version) {
-    message.push(`Version: \x1b[36m${version}\x1b[0m`);
+    message.push(`\x1b[0mNew version: \x1b[36m${version}\x1b[0m`);
   }
 
+  message.push('\x1b[36mBuild finished success');
   console.log(message.join(os.EOL));
 }
 
