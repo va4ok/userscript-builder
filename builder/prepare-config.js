@@ -16,7 +16,7 @@ const prepareConfig = (packageJson) => {
       name: packageJson.name,
       version: packageJson.version,
       description: packageJson.description,
-      author: packageJson.author,
+      author: packageJson.author?.name || packageJson.author,
       source,
       license: packageJson.license
     };
