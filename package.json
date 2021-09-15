@@ -8,12 +8,14 @@
     "node": ">=6.11.5"
   },
   "scripts": {
+    "commitlint": "commitlint",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "example:dev": "node ./bin/builder.js --mode dev",
     "example:release-bug": "node ./bin/builder.js --mode bugfix",
     "example:release-minor": "node ./bin/builder.js --mode minor",
-    "example:release-major": "node ./bin/builder.js --mode major"
+    "example:release-major": "node ./bin/builder.js --mode major",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -63,6 +65,9 @@
     }
   },
   "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "husky": "^7.0.2",
     "jest": "^25.1.0"
   }
 }
