@@ -1,4 +1,4 @@
-# userscript-builder
+# userscript-builder <!-- omit in TOC -->
 
 Simple tool for building userscript for tampermonkey.
 
@@ -13,11 +13,25 @@ ES6 modules are not supported.
 
 Don't forget import css files via ```import 'some-css.css'```. Extension is required.
 
+# Table of Content <!-- omit in TOC -->
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Install](#install)
+  - [Build options](#build-options)
+- [How it works](#how-it-works)
+- [Real life example](#real-life-example)
+- [Running the tests](#running-the-tests)
+- [Built With](#built-with)
+- [Authors](#authors)
+- [License](#license)
+- [History](#history)
+
 ## Getting Started
 
 Update Your package.json with userscript section
 
-```javascript
+```json
 {
   "name": "git-name",
   "version": "0.0.0",
@@ -134,7 +148,7 @@ import { StaticClass } from './static-class/static-class.js';
   const class1 = new Class1();
 
   class1.doSomething();
-  StaticClass.saySomerthing();
+  StaticClass.saySomething();
 })();
 ```
 
@@ -173,7 +187,7 @@ Build your user script and publish on https://openuserjs.org
 
 // src/static-class/static-class.js
 class StaticClass {
-  static saySomerthing() {
+  static saySomething() {
     console.log('static class method');
   }
 }
@@ -196,7 +210,7 @@ let notificator;
   const class1 = new Class1();
 
   class1.doSomething();
-  StaticClass.saySomerthing();
+  StaticClass.saySomething();
 })();
 
 // CSS injection
@@ -219,6 +233,10 @@ let notificator;
 })();
 ```
 
+## Real life example
+
+Please visit https://github.com/va4ok/jira2git-tools to see real life example.
+
 ## Running the tests
 
 ```bash
@@ -240,8 +258,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## History
 
 **0.4.0 - Stability**
-* Add jest test framework
-* Cover code with jest
+
+Bug fix
+* Unicode syntax error in template string appending to css style 
+[PR 31](https://github.com/va4ok/userscript-builder/pull/31)
+
+Other changes
+* Add tests
+* Update readme
 
 0.3.0 - Minor changes:
 * Skip empty meta info.
