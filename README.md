@@ -1,5 +1,7 @@
 # userscript-builder <!-- omit in TOC -->
 
+[![NPM version](https://img.shields.io/npm/v/userscript-builder.svg)](https://www.npmjs.com/package/userscript-builder)
+
 Simple tool for building userscript for tampermonkey.
 
 ES6 modules are not supported.

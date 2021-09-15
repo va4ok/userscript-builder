@@ -15,7 +15,8 @@
     "example:release-bug": "node ./bin/builder.js --mode bugfix",
     "example:release-minor": "node ./bin/builder.js --mode minor",
     "example:release-major": "node ./bin/builder.js --mode major",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -68,6 +69,7 @@
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "husky": "^7.0.2",
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "standard-version": "^9.3.1"
   }
 }
