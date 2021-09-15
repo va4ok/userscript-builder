@@ -20,7 +20,12 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Install](#install)
+  - [Setup](#setup)
   - [Build options](#build-options)
+    - [Dev](#dev)
+    - [Release-bugfix (patch)](#release-bugfix-patch)
+    - [Release-minor](#release-minor)
+    - [Release-major](#release-major)
 - [How it works](#how-it-works)
 - [Real life example](#real-life-example)
 - [Running the tests](#running-the-tests)
@@ -31,7 +36,46 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 
 ## Getting Started
 
-Update Your package.json with userscript section
+### Prerequisites
+
+It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
+
+### Install
+
+Install with npm:
+
+```bash
+npm install --save-dev userscript-builder
+```
+
+Install with yarn:
+
+```bash
+yarn add userscript-builder --dev
+```
+
+Or you can use `npx` as well
+
+```bash
+npx userscript-builder --mode dev
+```
+
+### Setup
+
+Update your package.json scripts section (provide aliases)
+
+```json
+{
+  "scripts": {
+    "build": "userscript-builder --mode dev",
+    "release:bugfix": "userscript-builder --mode bugfix",
+    "release:minor": "userscript-builder --mode minor",
+    "release:major": "userscript-builder --mode major"
+  }
+}
+```
+
+Update your package.json with userscript section
 
 ```json
 {
@@ -64,61 +108,57 @@ Fields version, description, author, license will be used in output meta.
 
 Default properties if not specified
 
-```
-  entry: './src/index.js',
-  dev: './dist',
-  release: './release',
-  fileName: 'new-userscript'
+```json
+{
+  "entry": "./src/index.js",
+  "dev": "./dist",
+  "release": "./release",
+  "fileName": "new-userscript",
 
-  name: 'New Userscript',
-  namespace: 'http://tampermonkey.net/',
-  version: '0.0.0',
-  description: 'try to take over the world!',
-  author: 'You',
-  match: 'http://*/*',
-  grant: 'none'
+  "name": "New Userscript",
+  "namespace": "http://tampermonkey.net/",
+  "version": "0.0.0",
+  "description": "try to take over the world!",
+  "author": "You",
+  "match": "http://*/*",
+  "grant": "none"
+}
 ```
 
 Please visit https://www.tampermonkey.net/ for more details and options.
 
-### Prerequisites
-
-It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
-
-### Install
-
-Install with npm:
-
-```
-npm install --save-dev userscript-builder
-```
-
-Install with yarn:
-
-```
-yarn add userscript-builder --dev
-```
-
 ### Build options
 
-Dev - no version changes
+#### Dev
 
-```
+No version changes.
+
+In result file will be added comments with included file location
+
+```bash
 npm run userscript-builder --mode dev
 # or
-npm run userscript-builder
+npx userscript-builder --mode dev
 ```
 
-Release-bugfix - bugfix version will increase and commited into package.json file
+#### Release-bugfix (patch)
 
-```
+New `patch` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
+
+```bash
 npm run userscript-builder --mode bugfix
 # or
 npm run userscript-builder --mode bug
-2.7.1 -> 2.7.2
+# 2.7.1 -> 2.7.2
 ```
 
-Release-minor - minor version will increase and commited into package.json file
+#### Release-minor
+
+New `minor` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
 
 ```
 npm run userscript-builder --mode minor
@@ -127,7 +167,11 @@ npm run userscript-builder --mode min
 2.7.1 -> 2.8.0
 ```
 
-Release-major - major version will increase and commited into package.json file
+#### Release-major
+
+New `major` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
 
 ```
 npm run userscript-builder --mode major
