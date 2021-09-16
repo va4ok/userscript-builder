@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 
@@ -8,10 +6,15 @@ const path = require('path');
  * @param obj
  */
 function update(obj) {
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
-  const packageJson = require(packageJsonPath);
+  try {
+    const packageJsonPath = path.join(process.cwd(), 'package.json');
+    // eslint-disable-next-line global-require,import/no-dynamic-require
+    const packageJson = require(packageJsonPath);
 
-  fs.writeFileSync(packageJsonPath, JSON.stringify({...packageJson, ...obj}, null, 2));
+    fs.writeFileSync(packageJsonPath, JSON.stringify({ ...packageJson, ...obj }, null, 2));
+    // eslint-disable-next-line no-empty
+  } catch (e) {
+  }
 }
 
 module.exports = update;
