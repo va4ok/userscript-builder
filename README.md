@@ -299,38 +299,8 @@ npm run test
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
 
 ## History
 
-**0.4.0 - Stability**
-
-Bug fix
-* Unicode syntax error in template string appending to css style 
-[PR 31](https://github.com/va4ok/userscript-builder/pull/31)
-
-Other changes
-* Add tests
-* Update readme
-
-0.3.0 - Minor changes:
-* Skip empty meta info.
-* Remove ```git+``` from source.
-* Remove ```default``` keyword in class declaration.
-* Remove code comments in release mode.
-
-0.2.0 - Support for arrays of meta values
-
-0.1.6 - Default file extension .js is used if extension is not defined into import line
-
-0.1.5 - Remove source path comments in code built in release mode
-
-0.1.4 - Remove leading dot for entry file
-
-0.1.3 - Build progress available for css files 
-
-0.1.2 - Add examples
-
-0.1.1 - Fix Current Working Directory using
-
-0.1.0 - Dev and release modes support
+See [CHANGELOG.md](./CHANGELOG.md)
