@@ -1,4 +1,6 @@
-# userscript-builder
+# userscript-builder <!-- omit in TOC -->
+
+[![NPM version](https://img.shields.io/npm/v/userscript-builder.svg)](https://www.npmjs.com/package/userscript-builder)
 
 Simple tool for building userscript for tampermonkey.
 
@@ -13,11 +15,69 @@ ES6 modules are not supported.
 
 Don't forget import css files via ```import 'some-css.css'```. Extension is required.
 
+# Table of Content <!-- omit in TOC -->
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Install](#install)
+  - [Setup](#setup)
+  - [Build options](#build-options)
+    - [Dev](#dev)
+    - [Release-bugfix (patch)](#release-bugfix-patch)
+    - [Release-minor](#release-minor)
+    - [Release-major](#release-major)
+- [How it works](#how-it-works)
+- [Real life example](#real-life-example)
+- [Running the tests](#running-the-tests)
+- [Built With](#built-with)
+- [Authors](#authors)
+- [License](#license)
+- [History](#history)
+
 ## Getting Started
 
-Update Your package.json with userscript section
+### Prerequisites
 
-```javascript
+It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
+
+### Install
+
+Install with npm:
+
+```bash
+npm install --save-dev userscript-builder
+```
+
+Install with yarn:
+
+```bash
+yarn add userscript-builder --dev
+```
+
+Or you can use `npx` as well
+
+```bash
+npx userscript-builder --mode dev
+```
+
+### Setup
+
+Update your package.json scripts section (provide aliases)
+
+```json
+{
+  "scripts": {
+    "build": "userscript-builder --mode dev",
+    "release:bugfix": "userscript-builder --mode bugfix",
+    "release:minor": "userscript-builder --mode minor",
+    "release:major": "userscript-builder --mode major"
+  }
+}
+```
+
+Update your package.json with userscript section
+
+```json
 {
   "name": "git-name",
   "version": "0.0.0",
@@ -48,61 +108,57 @@ Fields version, description, author, license will be used in output meta.
 
 Default properties if not specified
 
-```
-  entry: './src/index.js',
-  dev: './dist',
-  release: './release',
-  fileName: 'new-userscript'
+```json
+{
+  "entry": "./src/index.js",
+  "dev": "./dist",
+  "release": "./release",
+  "fileName": "new-userscript",
 
-  name: 'New Userscript',
-  namespace: 'http://tampermonkey.net/',
-  version: '0.0.0',
-  description: 'try to take over the world!',
-  author: 'You',
-  match: 'http://*/*',
-  grant: 'none'
+  "name": "New Userscript",
+  "namespace": "http://tampermonkey.net/",
+  "version": "0.0.0",
+  "description": "try to take over the world!",
+  "author": "You",
+  "match": "http://*/*",
+  "grant": "none"
+}
 ```
 
 Please visit https://www.tampermonkey.net/ for more details and options.
 
-### Prerequisites
-
-It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
-
-### Install
-
-Install with npm:
-
-```
-npm install --save-dev userscript-builder
-```
-
-Install with yarn:
-
-```
-yarn add userscript-builder --dev
-```
-
 ### Build options
 
-Dev - no version changes
+#### Dev
 
-```
+No version changes.
+
+In result file will be added comments with included file location
+
+```bash
 npm run userscript-builder --mode dev
 # or
-npm run userscript-builder
+npx userscript-builder --mode dev
 ```
 
-Release-bugfix - bugfix version will increase and commited into package.json file
+#### Release-bugfix (patch)
 
-```
+New `patch` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
+
+```bash
 npm run userscript-builder --mode bugfix
 # or
 npm run userscript-builder --mode bug
-2.7.1 -> 2.7.2
+# 2.7.1 -> 2.7.2
 ```
 
-Release-minor - minor version will increase and commited into package.json file
+#### Release-minor
+
+New `minor` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
 
 ```
 npm run userscript-builder --mode minor
@@ -111,7 +167,11 @@ npm run userscript-builder --mode min
 2.7.1 -> 2.8.0
 ```
 
-Release-major - major version will increase and commited into package.json file
+#### Release-major
+
+New `major` version will be increased and commited into package.json file
+
+From result file will be removed single and multi line comments
 
 ```
 npm run userscript-builder --mode major
@@ -134,7 +194,7 @@ import { StaticClass } from './static-class/static-class.js';
   const class1 = new Class1();
 
   class1.doSomething();
-  StaticClass.saySomerthing();
+  StaticClass.saySomething();
 })();
 ```
 
@@ -164,7 +224,7 @@ Build your user script and publish on https://openuserjs.org
 // @author       va4ok
 // @match        *://*.*
 // @grant        none
-// @source       git+https://github.com/va4ok/userscript-builder.git
+// @source       https://github.com/va4ok/userscript-builder.git
 // @license      MIT
 // @homepage     https://openuserjs.org/scripts/va4ok
 // @require      https://some.url.1
@@ -173,7 +233,7 @@ Build your user script and publish on https://openuserjs.org
 
 // src/static-class/static-class.js
 class StaticClass {
-  static saySomerthing() {
+  static saySomething() {
     console.log('static class method');
   }
 }
@@ -196,7 +256,7 @@ let notificator;
   const class1 = new Class1();
 
   class1.doSomething();
-  StaticClass.saySomerthing();
+  StaticClass.saySomething();
 })();
 
 // CSS injection
@@ -219,9 +279,15 @@ let notificator;
 })();
 ```
 
+## Real life example
+
+Please visit https://github.com/va4ok/jira2git-tools to see real life example.
+
 ## Running the tests
 
-Not implemented yet.
+```bash
+npm run test
+```
 
 ## Built With
 
@@ -237,7 +303,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## History
 
-**0.3.0 - Minor changes:**
+**0.4.0 - Stability**
+
+Bug fix
+* Unicode syntax error in template string appending to css style 
+[PR 31](https://github.com/va4ok/userscript-builder/pull/31)
+
+Other changes
+* Add tests
+* Update readme
+
+0.3.0 - Minor changes:
 * Skip empty meta info.
 * Remove ```git+``` from source.
 * Remove ```default``` keyword in class declaration.

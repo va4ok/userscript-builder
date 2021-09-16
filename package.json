@@ -1,18 +1,24 @@
 {
   "name": "userscript-builder",
-  "version": "0.3.0",
-  "description": "Tool for building userscript for teampermonkey.",
+  "version": "0.4.0",
+  "description": "Tool for building userscript for tampermonkey.",
   "main": "builder/build.js",
   "bin": "./bin/builder.js",
   "engines": {
     "node": ">=6.11.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "commitlint": "commitlint",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "example:dev": "node ./bin/builder.js --mode dev",
     "example:release-bug": "node ./bin/builder.js --mode bugfix",
     "example:release-minor": "node ./bin/builder.js --mode minor",
-    "example:release-major": "node ./bin/builder.js --mode major"
+    "example:release-major": "node ./bin/builder.js --mode major",
+    "lint": "eslint builder",
+    "lint:fix": "eslint builder --fix",
+    "prepare": "husky install",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -32,6 +38,11 @@
   "dependencies": {
     "minimist": "^1.2.0"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "builder/**/*.js"
+    ]
+  },
   "userscript": {
     "entry": "./example/index.js",
     "dev": "./dist",
@@ -49,5 +60,21 @@
       ],
       "emptyValue": ""
     }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "husky": "^7.0.2",
+    "jest": "^25.1.0",
+    "lint-staged": "^11.1.2",
+    "standard-version": "^9.3.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint"
+    ]
   }
 }

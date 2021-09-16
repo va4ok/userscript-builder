@@ -1,0 +1,36 @@
+{
+  "name": "my-userscript",
+  "version": "4.4.4",
+  "description": "Some description",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/va4ok/userscript-builder.git"
+  },
+  "author": "va4ok",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/va4ok/userscript-builder/issues"
+  },
+  "homepage": "https://github.com/va4ok/userscript-builder#readme",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  },
+  "userscript": {
+    "entry": "./example/index.js",
+    "dev": "./dist",
+    "release": "./release",
+    "fileName": "example",
+    "meta": {
+      "name": "Example",
+      "namespace": "http://tampermonkey.net/",
+      "homepage": "https://openuserjs.org/scripts/va4ok",
+      "match": "*://*.*",
+      "grant": "none",
+      "require": [
+        "https://some.url.1",
+        "https://some.url.2"
+      ],
+      "emptyValue": ""
+    }
+  }
+}
