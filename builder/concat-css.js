@@ -1,4 +1,3 @@
-'use strict';
 const os = require('os');
 
 /**
@@ -12,7 +11,9 @@ function concatCss(cssArray, addFilePathComments, onFileProcessed = () => {
   let css = '';
 
   cssArray.forEach((element, index) => {
-    index && (css += os.EOL);
+    if (index) {
+      css += os.EOL;
+    }
 
     if (addFilePathComments) {
       css += `/* ${element.filePath} */${os.EOL}`;

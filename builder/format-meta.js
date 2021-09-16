@@ -1,6 +1,21 @@
-'use strict';
-
 const os = require('os');
+
+/**
+ * Return meta property string filled with whitespaces
+ * @param {string} property
+ * @param {string} val
+ * @param {number} length
+ * @returns {string}
+ */
+function formatCommentString(property, val, length) {
+  let prop = property;
+  if (prop.length < length) {
+    const spacer = new Array(length - prop.length).fill(' ');
+    prop += spacer.join('');
+  }
+
+  return `// @${prop}  ${val}`;
+}
 
 /**
  * Format meta from object
@@ -8,50 +23,38 @@ const os = require('os');
  * @returns {string}
  */
 function formatMeta(meta) {
+  const result = ['// ==UserScript=='];
   let length = 0;
-  let result = '';
 
   if (!meta) {
     return '';
   }
 
-  for (let key of Object.keys(meta)) {
+  // Get the longest line
+  Object.keys(meta).forEach((key) => {
     length = key.length > length ? key.length : length;
-  }
+  });
 
-  result += '// ==UserScript==' + os.EOL;
+  Object.entries(meta).forEach((keyValue) => {
+    const key = keyValue[0];
+    let value = keyValue[1];
 
-  for (let [key, value] of Object.entries(meta)) {
     if (Array.isArray(value)) {
-      value.forEach(val => result += `${formatCommentString(key, val, length)}${os.EOL}`);
+      value.forEach((val) => {
+        result.push(formatCommentString(key, val, length));
+      });
     } else if (value !== '') {
       if (key === 'source') {
         value = value.replace(/^git\+http/, 'http');
       }
 
-      result += `${formatCommentString(key, value, length)}${os.EOL}`;
+      result.push(formatCommentString(key, value, length));
     }
-  }
+  });
 
-  result += '// ==/UserScript==';
+  result.push('// ==/UserScript==');
 
-  return result;
-}
-
-/**
- * Return meta property string filled with whitespaces
- * @param {string} prop
- * @param {string} val
- * @param {number} length
- * @returns {string}
- */
-function formatCommentString(prop, val, length) {
-  if (prop.length < length) {
-    const spacer = new Array(length - prop.length).fill(' ');
-    prop += spacer.join('');
-  }
-
-  return `// @${prop}  ${val}`;
+  return result.join(os.EOL);
 }
 
 module.exports = formatMeta;

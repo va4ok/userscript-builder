@@ -1,4 +1,3 @@
-'use strict';
 const fs = require('fs');
 
 const minimist = require('minimist');
@@ -10,25 +9,25 @@ const utils = require('./utils');
 function build() {
   const argv = minimist(process.argv.slice(2));
   const config = utils.getConfig();
-  const newversion = increaseVersion(config.meta.version, argv['mode']);
+  const newversion = increaseVersion(config.meta.version, argv.mode);
   const isRelease = newversion !== config.meta.version;
   const files = {
     js: [],
     css: [],
-    visited: []
+    visited: [],
   };
 
-  utils.startBuildReport(isRelease, argv['mode']);
+  utils.startBuildReport(isRelease, argv.mode);
 
   config.meta.version = newversion;
   utils.buildTree(config.entry, null, files);
   fs.writeFileSync(
     utils.createFolderAndFile(isRelease, config),
-    utils.concatFiles(!isRelease, files, config.meta)
+    utils.concatFiles(!isRelease, files, config.meta),
   );
 
   if (isRelease) {
-    updatePackageJson({version: newversion});
+    updatePackageJson({ version: newversion });
   }
 
   utils.finishBuildReport(isRelease ? newversion : null);

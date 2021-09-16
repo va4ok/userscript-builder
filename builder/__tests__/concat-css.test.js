@@ -1,22 +1,23 @@
-'use strict';
-const concatCss = require('../concat-css');
+/* eslint-env node, jest */
+
 const os = require('os');
+const concatCss = require('../concat-css');
 
 describe('css files concat', () => {
   test('concatenate 2 files do not remove file path', () => {
     const input = [
       {
         filePath: '/file/path/1.css',
-        file: '.rule1 { padding: 12px; }'
+        file: '.rule1 { padding: 12px; }',
       },
       {
         filePath: '/file/path/2.css',
-        file: '.rule2 { margin: 12px; }'
+        file: '.rule2 { margin: 12px; }',
       }];
-    const output = '/* /file/path/1.css */' + os.EOL +
-      '.rule1 { padding: 12px; }' + os.EOL +
-      '/* /file/path/2.css */' + os.EOL +
-      '.rule2 { margin: 12px; }';
+    const output = `/* /file/path/1.css */${os.EOL
+    }.rule1 { padding: 12px; }${os.EOL
+    }/* /file/path/2.css */${os.EOL
+    }.rule2 { margin: 12px; }`;
 
     expect(concatCss(input, true)).toBe(output);
   });
@@ -25,14 +26,14 @@ describe('css files concat', () => {
     const input = [
       {
         filePath: '/file/path/1.css',
-        file: '.rule1 { padding: 12px; }'
+        file: '.rule1 { padding: 12px; }',
       },
       {
         filePath: '/file/path/2.css',
-        file: '.rule2 { margin: 12px; }'
+        file: '.rule2 { margin: 12px; }',
       }];
-    const output = '.rule1 { padding: 12px; }' + os.EOL +
-      '.rule2 { margin: 12px; }';
+    const output = `.rule1 { padding: 12px; }${os.EOL
+    }.rule2 { margin: 12px; }`;
 
     expect(concatCss(input, false)).toBe(output);
   });
@@ -41,11 +42,11 @@ describe('css files concat', () => {
     const input = [
       {
         filePath: '/file/path/1.css',
-        file: '.rule1 { padding: 12px; }'
+        file: '.rule1 { padding: 12px; }',
       },
       {
         filePath: '/file/path/2.css',
-        file: '.rule2 { margin: 12px; }'
+        file: '.rule2 { margin: 12px; }',
       }];
     const callbackMock = jest.fn();
 

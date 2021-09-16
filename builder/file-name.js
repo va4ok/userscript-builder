@@ -1,12 +1,10 @@
-'use strict';
-
 /**
  * Allowed extensions
  * @type {string[]}
  */
 const extensions = [
   'js',
-  'css'
+  'css',
 ];
 
 /**
@@ -18,7 +16,7 @@ const extensions = [
 function isContainsExtension(filename, ext) {
   // we need check if extension with dot are last characters in filename
   // not sure if it is a good solution but it doesn't create any regexp
-  const dotExt = '.' + ext;
+  const dotExt = `.${ext}`;
   const extLength = dotExt.length;
   const offset = filename.length - extLength;
 
@@ -35,7 +33,7 @@ function isContainsExtensionFromList(filename, extensionList) {
   const filenameLowCase = filename.toLowerCase();
   let result = false;
 
-  extensionList.forEach(ext => {
+  extensionList.forEach((ext) => {
     // if result true - we already found extension
     if (!result) {
       result = isContainsExtension(filenameLowCase, ext);
@@ -55,7 +53,7 @@ function normalizeFileName(filePath) {
     return filePath;
   }
 
-  return filePath + '.js';
+  return `${filePath}.js`;
 }
 
 /**
@@ -67,4 +65,4 @@ function revertSlashes(filePath) {
   return filePath.split('\\').join('/');
 }
 
-module.exports = {normalizeFileName, revertSlashes};
+module.exports = { normalizeFileName, revertSlashes };

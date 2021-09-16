@@ -6,16 +6,17 @@ const formatMeta = require('./format-meta');
 const concatCss = require('./concat-css');
 const cssInJs = require('./css-in-js');
 const prepareConfig = require('./prepare-config');
-const fileName = require("./file-name");
-const prepareJs = require("./prepare-js");
+const fileName = require('./file-name');
+const prepareJs = require('./prepare-js');
 
 function getConfig() {
   let packageJson;
 
   try {
+    // eslint-disable-next-line global-require,import/no-dynamic-require
     packageJson = require(path.join(process.cwd(), 'package.json'));
   } catch (e) {
-    console.warn("\x1b[1;33m%s\x1b[0m", "package.json wasn't found. Default parameters will be used.");
+    console.warn('\x1b[1;33m%s\x1b[0m', "package.json wasn't found. Default parameters will be used.");
     console.log('For details please see getting-started section in README.md');
   }
 
@@ -25,7 +26,7 @@ function getConfig() {
 function createFolderAndFile(isRelease, config) {
   const outFolder = path.join(
     process.cwd(),
-    isRelease ? config.release : config.dev
+    isRelease ? config.release : config.dev,
   );
   const outFileName = path.join(outFolder, `${config.fileName}.user.js`);
 
@@ -54,7 +55,7 @@ function getExistingFilePath(filePath, normalizedFilePath, parentPath) {
   if (parentPath) {
     errorMessage = `${parentPath} tries to import unreachable file ${filePath}`;
   } else {
-    errorMessage = 'Can not reach root script file: ' + path.join(process.cwd(), filePath);
+    errorMessage = `Can not reach root script file: ${path.join(process.cwd(), filePath)}`;
   }
 
   console.error('\x1b[1;31m%s\x1b[0m', errorMessage);
@@ -70,6 +71,7 @@ function getImports(file) {
   const imports = [];
   let matches;
 
+  // eslint-disable-next-line no-cond-assign
   while ((matches = importRegex.exec(file)) !== null) {
     imports.push(getImportPath(matches[0]));
   }
@@ -100,7 +102,7 @@ function concatFiles(addFilePathComments, files, configMeta) {
     const concatenatedCss = concatCss(
       files.css,
       addFilePathComments,
-      (filePath) => console.log(filePath)
+      (filePath) => console.log(filePath),
     );
     out += `${os.EOL}${os.EOL}${cssInJs(concatenatedCss, addFilePathComments)}`;
   }
@@ -123,38 +125,39 @@ function finishBuildReport(version) {
   console.log(message.join(os.EOL));
 }
 
+function isFileProcessed(visited, filePath, normalizedFilePath) {
+  const visitedList = visited || [];
+
+  return visitedList.includes(filePath)
+    || visitedList.includes(normalizedFilePath);
+}
+
 // TODO replace with pure function
 function buildTree(filePath, parentPath, files) {
+  let fullName = filePath;
   // Get full file name
   if (parentPath) {
-    filePath = path.join(parentPath, '..', filePath);
+    fullName = path.join(parentPath, '..', fullName);
   }
 
-  const normalizedFilePath = fileName.normalizeFileName(filePath);
+  const normalizedFilePath = fileName.normalizeFileName(fullName);
 
-  if (isFileProcessed(files.visited, filePath, normalizedFilePath)) {
+  if (isFileProcessed(files.visited, fullName, normalizedFilePath)) {
     return;
   }
 
-  filePath = getExistingFilePath(filePath, normalizedFilePath, parentPath);
+  fullName = getExistingFilePath(fullName, normalizedFilePath, parentPath);
 
-  const file = fs.readFileSync(filePath).toString();
+  const file = fs.readFileSync(fullName).toString();
   // Mark file as processed
-  files.visited.push(filePath);
-  getImports(file).forEach(imprt => buildTree(imprt, filePath, files));
+  files.visited.push(fullName);
+  getImports(file).forEach((imprt) => buildTree(imprt, fullName, files));
 
-  if (/\.css$/g.test(filePath)) {
-    files.css.push({file, filePath: fileName.revertSlashes(filePath)});
+  if (/\.css$/g.test(fullName)) {
+    files.css.push({ file, filePath: fileName.revertSlashes(fullName) });
   } else {
-    files.js.push({file: prepareJs(file), filePath: fileName.revertSlashes(filePath)});
+    files.js.push({ file: prepareJs(file), filePath: fileName.revertSlashes(fullName) });
   }
-}
-
-function isFileProcessed(visited, filePath, normalizedFilePath) {
-  visited = visited || [];
-
-  return visited.includes(filePath) ||
-    visited.includes(normalizedFilePath);
 }
 
 module.exports = {
@@ -166,5 +169,5 @@ module.exports = {
   startBuildReport,
   finishBuildReport,
   buildTree,
-  isFileProcessed
+  isFileProcessed,
 };

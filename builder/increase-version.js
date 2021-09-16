@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Return position in version according build mode
  * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
@@ -37,10 +35,10 @@ function increase(version, buildMode) {
   return version
     .split('.')
     .map((value, index) => {
-      let result = parseInt(value);
+      let result = parseInt(value, 10);
 
       if (index === position) {
-        result++;
+        result += 1;
       } else if (index > position) {
         result = 0;
       }

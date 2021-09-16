@@ -1,4 +1,7 @@
+/* eslint-env node, jest */
+
 const increaseVersion = require('../increase-version');
+
 const START_VERSION = '3.3.3';
 
 describe('Version generator', () => {

@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-env node, jest */
 
 const prepareJs = require('../prepare-js');
 
@@ -9,7 +9,7 @@ import SayHello from './say-hello/say-hello';
 
 class EmptyClass{}`;
 
-    const output = `class EmptyClass{}`;
+    const output = 'class EmptyClass{}';
 
     expect(prepareJs(input)).toBe(output);
   });
@@ -20,7 +20,7 @@ import SayHello from './say-hello/say-hello';
 
 export class EmptyClass{}`;
 
-    const output = `class EmptyClass{}`;
+    const output = 'class EmptyClass{}';
 
     expect(prepareJs(input)).toBe(output);
   });
@@ -31,7 +31,7 @@ import SayHello from './say-hello/say-hello';
 
 export default class EmptyClass{}`;
 
-    const output = `class EmptyClass{}`;
+    const output = 'class EmptyClass{}';
 
     expect(prepareJs(input)).toBe(output);
   });

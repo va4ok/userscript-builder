@@ -1,3 +1,5 @@
+/* eslint-env node, jest */
+
 const getConfig = jest.fn();
 const startBuildReport = jest.fn();
 const buildTree = jest.fn();
@@ -13,5 +15,5 @@ module.exports = {
   createFolderAndFile,
   concatFiles,
   updatePackageJson,
-  finishBuildReport
+  finishBuildReport,
 };

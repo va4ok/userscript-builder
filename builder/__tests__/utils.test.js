@@ -1,11 +1,12 @@
-'use strict';
+/* eslint-env node, jest */
 
 jest.mock('fs');
 jest.mock('../css-in-js');
-const utils = require('../utils');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const mockPackageJson = require('../__mocks__/mock-package.json');
+const utils = require('../utils');
 
 describe('utils', () => {
   describe('getConfig', () => {
@@ -45,11 +46,9 @@ describe('utils', () => {
     });
 
     test('package.json is available in project root', () => {
-      const mockPackageJson = require('../__mocks__/mock-package.json');
-
       jest.mock(
         path.join(process.cwd(), 'package.json'),
-        () => mockPackageJson
+        () => mockPackageJson,
       );
 
       const expected = {
@@ -149,7 +148,7 @@ describe('utils', () => {
       const result = utils.getExistingFilePath(
         filePath,
         normalizedFilePath,
-        parentPath
+        parentPath,
       );
 
       expect(result).toBe(filePath);
@@ -161,7 +160,7 @@ describe('utils', () => {
       const result = utils.getExistingFilePath(
         filePath,
         normalizedFilePath,
-        parentPath
+        parentPath,
       );
 
       expect(result).toBe(normalizedFilePath);
@@ -182,7 +181,7 @@ describe('utils', () => {
 
     test('if file path and normalized file path are unreachable for root', () => {
       fs.existsSync.mockReturnValue(false);
-      const errorMessage = 'Can not reach root script file: ' + path.join(process.cwd(), filePath);
+      const errorMessage = `Can not reach root script file: ${path.join(process.cwd(), filePath)}`;
 
       const result = () => {
         utils.getExistingFilePath(filePath, normalizedFilePath, null);
@@ -237,12 +236,12 @@ describe('utils', () => {
   describe('concatFiles', () => {
     const meta = {};
     const js = [
-      {filePath: 'c:/s\\file1.js', file: 'js content 1;'},
-      {filePath: 'c:/s\\file2.js', file: 'js content 2;'},
+      { filePath: 'c:/s\\file1.js', file: 'js content 1;' },
+      { filePath: 'c:/s\\file2.js', file: 'js content 2;' },
     ];
     const css = [
-      {filePath: 'c:/s\\file1.css', file: 'css content 1'},
-      {filePath: 'c:/s\\file2.css', file: 'css content 2'},
+      { filePath: 'c:/s\\file1.css', file: 'css content 1' },
+      { filePath: 'c:/s\\file2.css', file: 'css content 2' },
     ];
 
     jest.spyOn(console, 'log');
@@ -253,20 +252,20 @@ describe('utils', () => {
     });
 
     test('no files no meta', () => {
-      const result = utils.concatFiles(true, {js: [], css: []});
+      const result = utils.concatFiles(true, { js: [], css: [] });
 
       expect(result).toBe('');
     });
 
     test('no files', () => {
-      const result = utils.concatFiles(true, {js: [], css: []}, meta);
-      const expected = '// ==UserScript==' + os.EOL + '// ==/UserScript==';
+      const result = utils.concatFiles(true, { js: [], css: [] }, meta);
+      const expected = `// ==UserScript==${os.EOL}// ==/UserScript==`;
 
       expect(result).toBe(expected);
     });
 
     test('js and css files with path comments', () => {
-      const result = utils.concatFiles(true, {js, css}, meta);
+      const result = utils.concatFiles(true, { js, css }, meta);
       const expected = [
         '// ==UserScript==',
         '// ==/UserScript==',
@@ -280,14 +279,14 @@ describe('utils', () => {
         '/* c:/s\\file1.css */',
         'css content 1',
         '/* c:/s\\file2.css */',
-        'css content 2'
+        'css content 2',
       ].join(os.EOL);
 
       expect(result).toBe(expected);
     });
 
     test('js and css files without path comments', () => {
-      const result = utils.concatFiles(false, {js, css}, meta);
+      const result = utils.concatFiles(false, { js, css }, meta);
       const expected = [
         '// ==UserScript==',
         '// ==/UserScript==',
@@ -297,7 +296,7 @@ describe('utils', () => {
         'js content 2;',
         '',
         'css content 1',
-        'css content 2'
+        'css content 2',
       ].join(os.EOL);
 
       expect(result).toBe(expected);
@@ -338,7 +337,7 @@ describe('utils', () => {
 
       const expectedMessage = [
         '\x1b[0mNew version: \x1b[36m7.7.7\x1b[0m',
-        '\x1b[36mBuild finished success'
+        '\x1b[36mBuild finished success',
       ].join(os.EOL);
 
       expect(console.log).toHaveBeenCalledTimes(1);
@@ -347,26 +346,26 @@ describe('utils', () => {
   });
 
   describe('buildTree', () => {
-    let files = {css: [], js: [], visited: []};
+    let files = { css: [], js: [], visited: [] };
 
     beforeEach(() => {
       jest.resetAllMocks();
       jest.clearAllMocks();
-      files = {css: [], js: [], visited: []};
+      files = { css: [], js: [], visited: [] };
     });
 
     test('title test', () => {
       const indexFile = {
         file: 'export class IndexClass {}',
-        filePath: path.join(process.cwd(), './index.js')
+        filePath: path.join(process.cwd(), './index.js'),
       };
       const secondFile = {
         file: 'export class SecondClass {}',
-        filePath: path.join(process.cwd(), './second/second')
+        filePath: path.join(process.cwd(), './second/second'),
       };
       const cssFile = {
         file: '.hello {}',
-        filePath: path.join(process.cwd(), './second/second.css')
+        filePath: path.join(process.cwd(), './second/second.css'),
       };
 
       fs.existsSync.mockReturnValue(true);
@@ -377,19 +376,19 @@ describe('utils', () => {
         export class IndexClass {}`)
         .mockReturnValueOnce(`import './second.css';
         export class SecondClass {}`)
-        .mockReturnValueOnce(`.hello {}`);
+        .mockReturnValueOnce('.hello {}');
 
       utils.buildTree(indexFile.filePath, null, files);
 
       const expected = {
         css: [
-          {file: cssFile.file, filePath: cssFile.filePath.split('\\').join('/')}
+          { file: cssFile.file, filePath: cssFile.filePath.split('\\').join('/') },
         ],
         js: [
-          {file: secondFile.file, filePath: secondFile.filePath.split('\\').join('/')},
-          {file: indexFile.file, filePath: indexFile.filePath.split('\\').join('/')}
+          { file: secondFile.file, filePath: secondFile.filePath.split('\\').join('/') },
+          { file: indexFile.file, filePath: indexFile.filePath.split('\\').join('/') },
         ],
-        visited: [indexFile.filePath, secondFile.filePath, cssFile.filePath]
+        visited: [indexFile.filePath, secondFile.filePath, cssFile.filePath],
       };
 
       expect(files).toStrictEqual(expected);

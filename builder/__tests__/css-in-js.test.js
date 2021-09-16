@@ -1,10 +1,11 @@
-'use strict';
-const cssInJs = require('../css-in-js');
+/* eslint-env node, jest */
+
 const os = require('os');
+const cssInJs = require('../css-in-js');
 
 describe('css files concat', () => {
   test('do not remove start comment', () => {
-    const input = `.style-rule{ padding: 0; }`;
+    const input = '.style-rule{ padding: 0; }';
 
     const output = `// CSS injection${os.EOL}(function(){
   const $style = document.createElement('style');
@@ -25,7 +26,7 @@ describe('css files concat', () => {
   });
 
   test('remove start comment', () => {
-    const input = `.style-rule{ padding: 0; }`;
+    const input = '.style-rule{ padding: 0; }';
 
     const output = `(function(){
   const $style = document.createElement('style');

@@ -1,3 +1,5 @@
+/* eslint-env node, jest */
+
 const fileName = require('../file-name');
 
 describe('Normalize file name', () => {

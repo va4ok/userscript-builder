@@ -1,12 +1,12 @@
-'use strict';
-// Just to be sure =)
+/* eslint-env node, jest */
 
 const defaults = require('../defaults');
+
 const config = {
   entry: './src/index.js',
   dev: './dist',
   release: './release',
-  fileName: 'new-userscript'
+  fileName: 'new-userscript',
 };
 const meta = {
   name: 'New Userscript',
@@ -15,7 +15,7 @@ const meta = {
   description: 'try to take over the world!',
   author: 'You',
   match: 'http://*/*',
-  grant: 'none'
+  grant: 'none',
 };
 
 describe('Default values', () => {

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Removes from text 'import', 'export', 'export default' statements.
  * Removes from text single and multi line comments if flag given.
@@ -10,7 +8,7 @@
 function prepareJs(file, isRemoveComments = false) {
   const regexps = [
     '^[\\t\\r ]*import.+[\'"];$', // imports
-    '^export +(?:default +)*'     // exports
+    '^export +(?:default +)*', // exports
   ];
 
   if (isRemoveComments) {

@@ -1,3 +1,5 @@
-let updateProjectPackage = jest.fn();
+/* eslint-env node, jest */
+
+const updateProjectPackage = jest.fn();
 
 module.exports = updateProjectPackage;

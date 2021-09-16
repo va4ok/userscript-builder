@@ -1,4 +1,3 @@
-'use strict';
 const os = require('os');
 
 /**
@@ -7,7 +6,7 @@ const os = require('os');
  * @param {boolean} addStartComment - if add '// CSS injection' comment before function declaration
  */
 function cssInJs(css, addStartComment) {
-  return `${addStartComment ? '// CSS injection' + os.EOL : ''}(function(){
+  return `${addStartComment ? `// CSS injection${os.EOL}` : ''}(function(){
   const $style = document.createElement('style');
 
   $style.innerHTML = \`${css}\`;

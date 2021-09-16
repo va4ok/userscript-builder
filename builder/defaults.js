@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Default builder configuration
  * @namespace
@@ -12,7 +10,7 @@ const config = {
   entry: './src/index.js',
   dev: './dist',
   release: './release',
-  fileName: 'new-userscript'
+  fileName: 'new-userscript',
 };
 
 /**
@@ -33,7 +31,7 @@ const meta = {
   description: 'try to take over the world!',
   author: 'You',
   match: 'http://*/*',
-  grant: 'none'
+  grant: 'none',
 };
 
-module.exports = {config, meta};
+module.exports = { config, meta };
