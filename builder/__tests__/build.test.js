@@ -5,6 +5,7 @@ jest.mock('fs');
 jest.mock('../increase-version');
 jest.mock('../update-project-package');
 jest.mock('../utils');
+jest.mock('../meta');
 
 const minimist = require('minimist');
 const fs = require('fs');
@@ -12,6 +13,7 @@ const increaseVersion = require('../increase-version');
 const updateProjectPackage = require('../update-project-package');
 const utils = require('../utils');
 const build = require('../build');
+const meta = require('../meta');
 
 describe('Build test', () => {
   beforeEach(() => {
@@ -25,7 +27,7 @@ describe('Build test', () => {
   });
 
   test('Build dev script', () => {
-    minimist.mockReturnValue({ mode: 'dev' });
+    minimist.mockReturnValue({ mode: 'dev', validate: true });
     increaseVersion.mockReturnValue('0.0.0');
 
     build();
@@ -35,6 +37,7 @@ describe('Build test', () => {
     expect(updateProjectPackage).not.toHaveBeenCalled();
     expect(utils.finishBuildReport).toHaveBeenCalledTimes(1);
     expect(utils.finishBuildReport).toHaveBeenCalledWith(null);
+    expect(meta.validate).toHaveBeenCalledTimes(1);
   });
 
   test('Build release script', () => {
@@ -49,5 +52,13 @@ describe('Build test', () => {
     expect(updateProjectPackage).toHaveBeenCalledWith({ version: '1.0.0' });
     expect(utils.finishBuildReport).toHaveBeenCalledTimes(1);
     expect(utils.finishBuildReport).toHaveBeenCalledWith('1.0.0');
+    expect(meta.validate).toHaveBeenCalledTimes(1);
+  });
+
+  test('no validate build', () => {
+    minimist.mockReturnValue({ mode: 'dev', validate: false });
+
+    build();
+    expect(meta.validate).not.toHaveBeenCalled();
   });
 });

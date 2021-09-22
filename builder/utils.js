@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-const formatMeta = require('./format-meta');
+const meta = require('./meta');
 const concatCss = require('./concat-css');
 const cssInJs = require('./css-in-js');
 const prepareConfig = require('./prepare-config');
@@ -80,7 +80,7 @@ function getImports(file) {
 }
 
 function concatFiles(addFilePathComments, files, configMeta) {
-  let out = formatMeta(configMeta);
+  let out = meta.format(configMeta);
 
   console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
 

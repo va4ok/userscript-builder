@@ -26,6 +26,7 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
     - [Release-bugfix (patch)](#release-bugfix-patch)
     - [Release-minor](#release-minor)
     - [Release-major](#release-major)
+    - [Validation](#validation)
 - [How it works](#how-it-works)
 - [Real life example](#real-life-example)
 - [Running the tests](#running-the-tests)
@@ -178,6 +179,20 @@ npm run userscript-builder --mode major
 # or
 npm run userscript-builder --mode maj
 2.7.1 -> 3.0.0
+```
+
+#### Validation
+
+Builder will validate meta tags and provide issues by default.
+Validation can be skipped if you need by adding `--no-validate` argument.
+
+```json
+{
+  "scripts": {
+    "build": "userscript-builder --mode dev --no-validate"
+  }
+}
+
 ```
 
 ## How it works
