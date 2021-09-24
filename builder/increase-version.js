@@ -3,7 +3,7 @@
  * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
  * @returns {number}
  */
-function getPositionByBuildMode(buildMode) {
+function getPositionByBuildMode(buildMode = '') {
   switch (buildMode.toLowerCase()) {
     case 'major':
     case 'maj':
