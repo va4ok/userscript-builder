@@ -1,28 +1,20 @@
 /**
  * Return position in version according build mode
- * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
+ * @param {{ patch: boolean, minor: boolean, major: boolean }} buildMode
  * @returns {number}
  */
-function getPositionByBuildMode(buildMode = '') {
-  switch (buildMode.toLowerCase()) {
-    case 'major':
-    case 'maj':
-      return 0;
-    case 'minor':
-    case 'min':
-      return 1;
-    case 'bugfix':
-    case 'bug':
-      return 2;
-    default:
-      return -1;
-  }
+function getPositionByBuildMode(buildMode) {
+  if (buildMode.major) return 0;
+  if (buildMode.minor) return 1;
+  if (buildMode.patch) return 2;
+
+  return -1;
 }
 
 /**
- * Increase 3 number version according build mode
+ * Increase 3 number version according to build mode
  * @param {string} version
- * @param {'bug' | 'bugfix' | 'min' | 'minor' | 'maj' | 'major' | *} buildMode
+ * @param {{ patch: boolean, minor: boolean, major: boolean }} buildMode
  * @returns {string}
  */
 function increase(version, buildMode) {

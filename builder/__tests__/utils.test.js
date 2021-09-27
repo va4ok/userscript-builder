@@ -312,17 +312,17 @@ describe('utils', () => {
     });
 
     test('start message for release major', () => {
-      utils.startBuildReport(true, 'major');
+      utils.startBuildReport({ major: true, production: true });
 
       expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith('Build in release-major mode');
+      expect(console.log).lastCalledWith('Build in release-major production mode.');
     });
 
     test('start message for dev', () => {
-      utils.startBuildReport(false, 'dev');
+      utils.startBuildReport({ production: false });
 
       expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith('Build in dev mode');
+      expect(console.log).lastCalledWith('Build in development mode.');
     });
 
     test('finish message no version', () => {

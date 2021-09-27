@@ -1,45 +1,46 @@
 const fs = require('fs');
 
-const minimist = require('minimist');
 const meta = require('./meta');
+const utils = require('./utils');
+const args = require('./args');
 
 const increaseVersion = require('./increase-version');
 const updatePackageJson = require('./update-project-package');
-const utils = require('./utils');
 
 function build() {
-  const args = process.argv.slice(2);
-  const argv = minimist(args);
+  args.validate(process.argv);
+  const buildParams = args.parse(process.argv);
   const config = utils.getConfig();
-  const newversion = increaseVersion(config.meta.version, argv.mode);
-  const production = !argv.development && !argv.dev && argv.mode !== 'dev' && argv.mode !== 'development';
-  const noValidate = argv.validate === false;
-  const isRelease = newversion !== config.meta.version;
+  const isRelease = buildParams.major || buildParams.minor || buildParams.patch;
+  const version = {
+    new: increaseVersion(config.meta.version, buildParams),
+    old: config.meta.version,
+  };
   const files = {
     js: [],
     css: [],
     visited: [],
   };
 
-  utils.startBuildReport(isRelease, argv.mode);
+  utils.startBuildReport(buildParams);
 
-  config.meta.version = newversion;
+  config.meta.version = version.new;
   utils.buildTree(config.entry, null, files);
 
-  if (!noValidate) {
+  if (!buildParams.noValidate) {
     meta.validate(config.meta);
   }
 
   fs.writeFileSync(
-    utils.createFolderAndFile(production, config),
-    utils.concatFiles(!production, files, config.meta),
+    utils.createFolderAndFile(buildParams.production, config),
+    utils.concatFiles(!buildParams.production, files, config.meta),
   );
 
   if (isRelease) {
-    updatePackageJson({ version: newversion });
+    updatePackageJson({ version: version.new });
   }
 
-  utils.finishBuildReport(isRelease ? newversion : null);
+  utils.finishBuildReport(isRelease ? version.new : null);
 }
 
 module.exports = build;
