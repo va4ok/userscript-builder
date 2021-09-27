@@ -12,6 +12,7 @@ function build() {
   const argv = minimist(args);
   const config = utils.getConfig();
   const newversion = increaseVersion(config.meta.version, argv.mode);
+  const production = !argv.development && !argv.dev && argv.mode !== 'dev' && argv.mode !== 'development';
   const noValidate = argv.validate === false;
   const isRelease = newversion !== config.meta.version;
   const files = {
@@ -30,8 +31,8 @@ function build() {
   }
 
   fs.writeFileSync(
-    utils.createFolderAndFile(isRelease, config),
-    utils.concatFiles(!isRelease, files, config.meta),
+    utils.createFolderAndFile(production, config),
+    utils.concatFiles(!production, files, config.meta),
   );
 
   if (isRelease) {

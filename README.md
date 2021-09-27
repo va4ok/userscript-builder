@@ -19,14 +19,16 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Install](#install)
+  - [Install and run](#install-and-run)
   - [Setup](#setup)
   - [Build options](#build-options)
+    - [Production or development](#production-or-development)
+    - [Validation](#validation)
+  - [Build options (OLD API)](#build-options-old-api)
     - [Dev](#dev)
     - [Release-bugfix (patch)](#release-bugfix-patch)
     - [Release-minor](#release-minor)
     - [Release-major](#release-major)
-    - [Validation](#validation)
 - [How it works](#how-it-works)
 - [Real life example](#real-life-example)
 - [Running the tests](#running-the-tests)
@@ -39,26 +41,21 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 
 ### Prerequisites
 
-It works with NodeJS v10.16.0 or higher. Lower versions of NodeJS wasn't tested.
+It works with NodeJS v14. Other versions of NodeJS wasn't tested.
 
-### Install
-
-Install with npm:
+### Install and run
 
 ```bash
+# npm
 npm install --save-dev userscript-builder
-```
+npm run userscript-builder
 
-Install with yarn:
+# yarn
+yarn add userscript-builder
+yarn userscript-builder
 
-```bash
-yarn add userscript-builder --dev
-```
-
-Or you can use `npx` as well
-
-```bash
-npx userscript-builder --mode dev
+# npx
+npx userscript-builder
 ```
 
 ### Setup
@@ -130,6 +127,53 @@ Please visit https://www.tampermonkey.net/ for more details and options.
 
 ### Build options
 
+#### Production or development
+
+```bash
+# build production
+npm run userscript-builder --production
+npm run userscript-builder --prod
+npm run userscript-builder
+
+# development
+npm run userscript-builder --development
+npm run userscript-builder --dev
+```
+
+Development build will add comments about included files.
+
+Development output folder
+
+```json
+{
+  "userscript": {
+    "dev": "./dist"
+  }
+}
+```
+
+Production output folder
+
+```json
+{
+  "userscript": {
+    "release": "./release"
+  }
+}
+```
+
+#### Validation
+
+By default builder will validate meta tags with lightweight rules and display issues.
+Validation can be skipped if you need by adding `--no-validate` argument.
+
+```bash
+npm run userscript-builder --no-validate
+npx userscript-builder --no-validate
+```
+
+### Build options (OLD API)
+
 #### Dev
 
 No version changes.
@@ -181,19 +225,6 @@ npm run userscript-builder --mode maj
 2.7.1 -> 3.0.0
 ```
 
-#### Validation
-
-Builder will validate meta tags and provide issues by default.
-Validation can be skipped if you need by adding `--no-validate` argument.
-
-```json
-{
-  "scripts": {
-    "build": "userscript-builder --mode dev --no-validate"
-  }
-}
-
-```
 
 ## How it works
 

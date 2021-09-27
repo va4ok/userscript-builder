@@ -8,14 +8,22 @@
     "node": ">=6.11.5"
   },
   "scripts": {
-    "commitlint": "commitlint",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "example": "node ./bin/builder.js",
+
     "example:dev": "node ./bin/builder.js --mode dev",
     "example:dev:no-validate": "node ./bin/builder.js --mode dev --no-validate",
     "example:release-bug": "node ./bin/builder.js --mode bugfix",
     "example:release-minor": "node ./bin/builder.js --mode minor",
     "example:release-major": "node ./bin/builder.js --mode major",
+
+    "new-api:example:dev": "node ./bin/builder.js --dev",
+    "new-api:example:development": "node ./bin/builder.js --development",
+    "new-api:example:prod": "node ./bin/builder.js --prod",
+    "new-api:example:production": "node ./bin/builder.js --production",
+
+    "commitlint": "commitlint",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "eslint builder",
     "lint:fix": "eslint builder --fix",
     "prepare": "husky install",
