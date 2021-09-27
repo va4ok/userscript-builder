@@ -1,19 +1,19 @@
 /* eslint-env node, jest */
 
-jest.mock('minimist');
 jest.mock('fs');
 jest.mock('../increase-version');
 jest.mock('../update-project-package');
 jest.mock('../utils');
 jest.mock('../meta');
+jest.mock('../args');
 
-const minimist = require('minimist');
 const fs = require('fs');
 const increaseVersion = require('../increase-version');
 const updateProjectPackage = require('../update-project-package');
 const utils = require('../utils');
 const build = require('../build');
 const meta = require('../meta');
+const args = require('../args');
 
 describe('Build test', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('Build test', () => {
   });
 
   test('Build dev script', () => {
-    minimist.mockReturnValue({ mode: 'dev', validate: true });
+    args.parse.mockReturnValue({ production: false, noValidate: false });
     increaseVersion.mockReturnValue('0.0.0');
 
     build();
@@ -41,7 +41,7 @@ describe('Build test', () => {
   });
 
   test('Build release script', () => {
-    minimist.mockReturnValue({ mode: 'maj' });
+    args.parse.mockReturnValue({ major: true });
     increaseVersion.mockReturnValue('1.0.0');
 
     build();
@@ -56,7 +56,7 @@ describe('Build test', () => {
   });
 
   test('no validate build', () => {
-    minimist.mockReturnValue({ mode: 'dev', validate: false });
+    args.parse.mockReturnValue({ production: false, noValidate: true });
 
     build();
     expect(meta.validate).not.toHaveBeenCalled();

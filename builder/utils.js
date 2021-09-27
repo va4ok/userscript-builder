@@ -110,8 +110,40 @@ function concatFiles(addFilePathComments, files, configMeta) {
   return out;
 }
 
-function startBuildReport(isRelease, mode) {
-  console.log(`Build in ${isRelease ? 'release-' : ''}${mode} mode`);
+/**
+ * Messages on start build
+ * @param {{
+ * keepCodeComments: boolean,
+ * patch: boolean,
+ * minor: boolean,
+ * major: boolean,
+ * production: boolean,
+ * keepFilePathComments: boolean,
+ * noValidate: boolean
+ * }} buildParams
+ */
+function startBuildReport(buildParams) {
+  let message;
+
+  if (buildParams.major) {
+    message = `Build in release-major ${buildParams.production ? 'production' : 'development'} mode.`;
+  } else if (buildParams.minor) {
+    message = `Build in release-minor ${buildParams.production ? 'production' : 'development'} mode.`;
+  } else if (buildParams.patch) {
+    message = `Build in release-patch ${buildParams.production ? 'production' : 'development'} mode.`;
+  } else {
+    message = `Build in ${buildParams.production ? 'production' : 'development'} mode.`;
+  }
+
+  if (buildParams.noValidate) {
+    if (message) {
+      message += '\n';
+    }
+
+    message += 'Meta validation messages will be muted.';
+  }
+
+  console.log(message);
 }
 
 function finishBuildReport(version) {

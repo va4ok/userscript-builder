@@ -142,25 +142,8 @@ npm run userscript-builder --dev
 
 Development build will add comments about included files.
 
-Development output folder
-
-```json
-{
-  "userscript": {
-    "dev": "./dist"
-  }
-}
-```
-
-Production output folder
-
-```json
-{
-  "userscript": {
-    "release": "./release"
-  }
-}
-```
+Development output folder will be set from `userscript.dev` or `userscript.release` 
+according to build mode.
 
 #### Validation
 
@@ -172,7 +155,18 @@ npm run userscript-builder --no-validate
 npx userscript-builder --no-validate
 ```
 
-### Build options (OLD API)
+#### Update package json version
+
+```bash
+# patch version 2.7.1 -> 2.7.2
+npm run userscript-builder --release-patch
+# minor version 2.7.1 -> 2.8.0
+npm run userscript-builder --release-minor
+# major version 2.7.1 -> 3.0.0
+npm run userscript-builder --release-major
+```
+
+### [DEPRECATED] Build options (OLD API)
 
 #### Dev
 
