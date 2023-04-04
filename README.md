@@ -17,26 +17,27 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
 
 # Table of Content <!-- omit in TOC -->
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Install and run](#install-and-run)
-  - [Setup](#setup)
-  - [Build options](#build-options)
-    - [Production or development](#production-or-development)
-    - [Validation](#validation)
-    - [Update package json version](#update-package-json-version)
-  - [[DEPRECATED] Build options (OLD API)](#deprecated-build-options-old-api)
-    - [Dev](#dev)
-    - [Release-bugfix (patch)](#release-bugfix-patch)
-    - [Release-minor](#release-minor)
-    - [Release-major](#release-major)
-- [How it works](#how-it-works)
-- [Real life example](#real-life-example)
-- [Running the tests](#running-the-tests)
-- [Built With](#built-with)
-- [Authors](#authors)
-- [License](#license)
-- [History](#history)
+- [userscript-builder ](#userscript-builder-)
+- [Table of Content ](#table-of-content-)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Install and run](#install-and-run)
+    - [Setup](#setup)
+    - [Build options](#build-options)
+      - [Production or development](#production-or-development)
+      - [Validation](#validation)
+      - [Update package json version](#update-package-json-version)
+    - [\[DEPRECATED\] Build options (OLD API)](#deprecated-build-options-old-api)
+      - [Dev](#dev)
+      - [Release-bugfix (patch)](#release-bugfix-patch)
+      - [Release-minor](#release-minor)
+      - [Release-major](#release-major)
+  - [How it works](#how-it-works)
+  - [Real life example](#real-life-example)
+  - [Running the tests](#running-the-tests)
+  - [Authors](#authors)
+  - [License](#license)
+  - [History](#history)
 
 ## Getting Started
 
@@ -329,10 +330,6 @@ Please visit https://github.com/va4ok/jira2git-tools to see real life example.
 ```bash
 npm run test
 ```
-
-## Built With
-
-* [minimist](https://github.com/substack/minimist) - Node arguments parser
 
 ## Authors
 
