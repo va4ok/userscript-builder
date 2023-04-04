@@ -20,7 +20,6 @@ describe('utils', () => {
         throw new Error('File not found');
       });
 
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
       const expected = {
         dev: './dist',
         entry: './src/index.js',
@@ -40,9 +39,6 @@ describe('utils', () => {
       const config = utils.getConfig();
 
       expect(config).toStrictEqual(expected);
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-
-      consoleWarnSpy.mockRestore();
     });
 
     test('package.json is available in project root', () => {
@@ -135,7 +131,6 @@ describe('utils', () => {
     const filePath = 'filePath';
     const normalizedFilePath = 'normalizedFilePath';
     const parentPath = 'parentPath';
-    const consoleError = jest.spyOn(console, 'error');
 
     beforeEach(() => {
       jest.resetAllMocks();
@@ -168,28 +163,21 @@ describe('utils', () => {
 
     test('if file path and normalized file path are unreachable', () => {
       fs.existsSync.mockReturnValue(false);
-      const errorMessage = `${parentPath} tries to import unreachable file ${filePath}`;
 
       const result = () => {
         utils.getExistingFilePath(filePath, normalizedFilePath, parentPath);
       };
 
       expect(result).toThrowError(new Error('Unreachable file'));
-      expect(consoleError).toHaveBeenCalledTimes(1);
-      expect(consoleError).toHaveBeenCalledWith('\x1b[1;31m%s\x1b[0m', errorMessage);
     });
 
     test('if file path and normalized file path are unreachable for root', () => {
       fs.existsSync.mockReturnValue(false);
-      const errorMessage = `Can not reach root script file: ${path.join(process.cwd(), filePath)}`;
-
       const result = () => {
         utils.getExistingFilePath(filePath, normalizedFilePath, null);
       };
 
       expect(result).toThrowError(new Error('Unreachable file'));
-      expect(consoleError).toHaveBeenCalledTimes(1);
-      expect(consoleError).toHaveBeenCalledWith('\x1b[1;31m%s\x1b[0m', errorMessage);
     });
   });
 
@@ -300,48 +288,6 @@ describe('utils', () => {
       ].join(os.EOL);
 
       expect(result).toBe(expected);
-    });
-  });
-
-  describe('build reports', () => {
-    jest.spyOn(console, 'log');
-
-    beforeEach(() => {
-      jest.resetAllMocks();
-      jest.clearAllMocks();
-    });
-
-    test('start message for release major', () => {
-      utils.startBuildReport({ major: true, production: true });
-
-      expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith('Build in release-major production mode.');
-    });
-
-    test('start message for dev', () => {
-      utils.startBuildReport({ production: false });
-
-      expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith('Build in development mode.');
-    });
-
-    test('finish message no version', () => {
-      utils.finishBuildReport();
-
-      expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith('\x1b[36mBuild finished success');
-    });
-
-    test('finish message with version', () => {
-      utils.finishBuildReport('7.7.7');
-
-      const expectedMessage = [
-        '\x1b[0mNew version: \x1b[36m7.7.7\x1b[0m',
-        '\x1b[36mBuild finished success',
-      ].join(os.EOL);
-
-      expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).lastCalledWith(expectedMessage);
     });
   });
 

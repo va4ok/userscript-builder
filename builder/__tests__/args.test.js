@@ -54,8 +54,8 @@ describe('args', () => {
     test('dev issue', () => {
       args.validate({ noValidate: true, mode: 'dev' });
 
-      const message = '--mode dev parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --development instead.';
+      const message = '\x1b[1;33m--mode dev parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --development instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -63,8 +63,8 @@ describe('args', () => {
     test('bug issue', () => {
       args.validate({ noValidate: true, mode: 'bug' });
 
-      const message = '--mode bug parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-patch instead.';
+      const message = '\x1b[1;33m--mode bug parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-patch instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -72,8 +72,8 @@ describe('args', () => {
     test('bugfix issue', () => {
       args.validate({ noValidate: true, mode: 'bugfix' });
 
-      const message = '--mode bugfix parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-patch instead.';
+      const message = '\x1b[1;33m--mode bugfix parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-patch instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -81,8 +81,8 @@ describe('args', () => {
     test('min issue', () => {
       args.validate({ noValidate: true, mode: 'min' });
 
-      const message = '--mode min parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-minor instead.';
+      const message = '\x1b[1;33m--mode min parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-minor instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -90,8 +90,8 @@ describe('args', () => {
     test('minor issue', () => {
       args.validate({ noValidate: true, mode: 'minor' });
 
-      const message = '--mode minor parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-minor instead.';
+      const message = '\x1b[1;33m--mode minor parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-minor instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -99,8 +99,8 @@ describe('args', () => {
     test('maj issue', () => {
       args.validate({ noValidate: true, mode: 'maj' });
 
-      const message = '--mode maj parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-major instead.';
+      const message = '\x1b[1;33m--mode maj parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-major instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
@@ -108,8 +108,8 @@ describe('args', () => {
     test('major issue', () => {
       args.validate({ noValidate: true, mode: 'major' });
 
-      const message = '--mode major parameter is deprecated and will will be deleted in upcoming major release. '
-        + 'Use --release-major instead.';
+      const message = '\x1b[1;33m--mode major parameter is deprecated and will will be deleted in upcoming major release. '
+        + 'Use --release-major instead.\x1b[0m';
       expect(consoleLogSpy).toHaveBeenCalledTimes(1);
       expect(consoleLogSpy).toHaveBeenCalledWith(message);
     });
