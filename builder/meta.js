@@ -1,4 +1,5 @@
 const os = require('os');
+const report = require('./report');
 
 class MetaValidationRule {
   constructor(namePattern, valuePattern, isMultiple) {
@@ -104,12 +105,12 @@ function validateProperty(name, value, rules) {
       let result = true;
 
       if (!rule.validateValue(value)) {
-        console.log(`Looks like meta property: ${name} have invalid value: ${value}`);
+        report.invalidMetaValue(name, value);
         result = false;
       }
 
       if (rule.getVisited()) {
-        console.log(`Looks like you are trying to use multiple meta property that should be single: ${name}`);
+        report.invalidDuplicate(name);
         result = false;
       }
 
@@ -118,7 +119,7 @@ function validateProperty(name, value, rules) {
     }
   }
 
-  console.log(`Looks you are trying to use unsupported meta property: ${name}`);
+  report.invalidMetaProperty(name);
 
   return false;
 }
@@ -147,12 +148,12 @@ function validate(meta) {
   });
 
   if (meta.updateURL && !meta.version) {
-    console.log('updateURL property requires version property as well.');
+    report.updateURLRequiresVersion();
     hasInvalid = true;
   }
 
   if (hasInvalid) {
-    console.log('Please visit https://www.tampermonkey.net/documentation.php?ext=dhdg for more details');
+    report.moreInfo();
   }
 }
 

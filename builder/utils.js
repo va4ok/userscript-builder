@@ -8,6 +8,7 @@ const cssInJs = require('./css-in-js');
 const prepareConfig = require('./prepare-config');
 const fileName = require('./file-name');
 const prepareJs = require('./prepare-js');
+const report = require('./report');
 
 function getConfig() {
   let packageJson;
@@ -16,8 +17,7 @@ function getConfig() {
     // eslint-disable-next-line global-require,import/no-dynamic-require
     packageJson = require(path.join(process.cwd(), 'package.json'));
   } catch (e) {
-    console.warn('\x1b[1;33m%s\x1b[0m', "package.json wasn't found. Default parameters will be used.");
-    console.log('For details please see getting-started section in README.md');
+    report.packageJsonNotFound();
   }
 
   return prepareConfig(packageJson);
@@ -58,7 +58,7 @@ function getExistingFilePath(filePath, normalizedFilePath, parentPath) {
     errorMessage = `Can not reach root script file: ${path.join(process.cwd(), filePath)}`;
   }
 
-  console.error('\x1b[1;31m%s\x1b[0m', errorMessage);
+  report.error(errorMessage);
   throw new Error('Unreachable file');
 }
 
@@ -82,12 +82,12 @@ function getImports(file) {
 function concatFiles(addFilePathComments, files, configMeta) {
   let out = meta.format(configMeta);
 
-  console.log('\x1b[33m%s\x1b[0m', 'Concat js files');
+  report.note('Concat js files');
 
   files.js.forEach((file) => {
     const filePath = file.filePath.replace(/^\.\//g, '');
 
-    console.log(`${filePath}`);
+    report.info(`${filePath}`);
     out += os.EOL + os.EOL;
 
     if (addFilePathComments) {
@@ -98,63 +98,16 @@ function concatFiles(addFilePathComments, files, configMeta) {
   });
 
   if (files.css.length) {
-    console.log('\x1b[33m%s\x1b[0m', 'Concat css files');
+    report.note('Concat css files');
     const concatenatedCss = concatCss(
       files.css,
       addFilePathComments,
-      (filePath) => console.log(filePath),
+      (filePath) => report.info(filePath),
     );
     out += `${os.EOL}${os.EOL}${cssInJs(concatenatedCss, addFilePathComments)}`;
   }
 
   return out;
-}
-
-/**
- * Messages on start build
- * @param {{
- * keepCodeComments: boolean,
- * patch: boolean,
- * minor: boolean,
- * major: boolean,
- * production: boolean,
- * keepFilePathComments: boolean,
- * noValidate: boolean
- * }} buildParams
- */
-function startBuildReport(buildParams) {
-  let message;
-
-  if (buildParams.major) {
-    message = `Build in release-major ${buildParams.production ? 'production' : 'development'} mode.`;
-  } else if (buildParams.minor) {
-    message = `Build in release-minor ${buildParams.production ? 'production' : 'development'} mode.`;
-  } else if (buildParams.patch) {
-    message = `Build in release-patch ${buildParams.production ? 'production' : 'development'} mode.`;
-  } else {
-    message = `Build in ${buildParams.production ? 'production' : 'development'} mode.`;
-  }
-
-  if (buildParams.noValidate) {
-    if (message) {
-      message += '\n';
-    }
-
-    message += 'Meta validation messages will be muted.';
-  }
-
-  console.log(message);
-}
-
-function finishBuildReport(version) {
-  const message = [];
-
-  if (version) {
-    message.push(`\x1b[0mNew version: \x1b[36m${version}\x1b[0m`);
-  }
-
-  message.push('\x1b[36mBuild finished success');
-  console.log(message.join(os.EOL));
 }
 
 function isFileProcessed(visited, filePath, normalizedFilePath) {
@@ -198,8 +151,6 @@ module.exports = {
   getExistingFilePath,
   getImports,
   concatFiles,
-  startBuildReport,
-  finishBuildReport,
   buildTree,
   isFileProcessed,
 };

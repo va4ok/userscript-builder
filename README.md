@@ -11,7 +11,7 @@ ES6 modules are not supported.
 * Support css files.
 * No webpack
 * No babel
-* The only one third party dependency
+* No third party
 
 Don't forget import css files via ```import 'some-css.css'```. Extension is required.
 
@@ -24,7 +24,8 @@ Don't forget import css files via ```import 'some-css.css'```. Extension is requ
   - [Build options](#build-options)
     - [Production or development](#production-or-development)
     - [Validation](#validation)
-  - [Build options (OLD API)](#build-options-old-api)
+    - [Update package json version](#update-package-json-version)
+  - [[DEPRECATED] Build options (OLD API)](#deprecated-build-options-old-api)
     - [Dev](#dev)
     - [Release-bugfix (patch)](#release-bugfix-patch)
     - [Release-minor](#release-minor)
