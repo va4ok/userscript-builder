@@ -3,13 +3,13 @@ const fs = require('fs');
 const meta = require('./meta');
 const utils = require('./utils');
 const args = require('./args');
+const report = require('./report');
 
 const increaseVersion = require('./increase-version');
 const updatePackageJson = require('./update-project-package');
 
 function build() {
-  args.validate(process.argv);
-  const buildParams = args.parse(process.argv);
+  const buildParams = args.parse(process.argv.slice(2));
   const config = utils.getConfig();
   const isRelease = buildParams.major || buildParams.minor || buildParams.patch;
   const version = {
@@ -22,7 +22,7 @@ function build() {
     visited: [],
   };
 
-  utils.startBuildReport(buildParams);
+  report.startBuild(buildParams);
 
   config.meta.version = version.new;
   utils.buildTree(config.entry, null, files);
@@ -40,7 +40,7 @@ function build() {
     updatePackageJson({ version: version.new });
   }
 
-  utils.finishBuildReport(isRelease ? version.new : null);
+  report.finishBuild(isRelease ? version.new : null);
 }
 
 module.exports = build;

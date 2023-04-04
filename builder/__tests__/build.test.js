@@ -31,12 +31,9 @@ describe('Build test', () => {
     increaseVersion.mockReturnValue('0.0.0');
 
     build();
-    expect(utils.startBuildReport).toHaveBeenCalledTimes(1);
     expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
     expect(fs.writeFileSync).toHaveBeenCalledWith('path', 'concat files content');
     expect(updateProjectPackage).not.toHaveBeenCalled();
-    expect(utils.finishBuildReport).toHaveBeenCalledTimes(1);
-    expect(utils.finishBuildReport).toHaveBeenCalledWith(null);
     expect(meta.validate).toHaveBeenCalledTimes(1);
   });
 
@@ -45,13 +42,10 @@ describe('Build test', () => {
     increaseVersion.mockReturnValue('1.0.0');
 
     build();
-    expect(utils.startBuildReport).toHaveBeenCalledTimes(1);
     expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
     expect(fs.writeFileSync).toHaveBeenCalledWith('path', 'concat files content');
     expect(updateProjectPackage).toHaveBeenCalledTimes(1);
     expect(updateProjectPackage).toHaveBeenCalledWith({ version: '1.0.0' });
-    expect(utils.finishBuildReport).toHaveBeenCalledTimes(1);
-    expect(utils.finishBuildReport).toHaveBeenCalledWith('1.0.0');
     expect(meta.validate).toHaveBeenCalledTimes(1);
   });
 

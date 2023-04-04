@@ -1,39 +1,64 @@
-const minimist = require('minimist');
+const report = require('./report');
 
-function parameterDeprecatedMessage(oldParam, newParam) {
-  console.log(`--mode ${oldParam} parameter is deprecated and will will be deleted in upcoming major release. `
-    + `Use --${newParam} instead.`);
+/**
+ * Transform process arguments array into object with boolean and string values.
+ * @param {string[]} processArguments
+ * @returns
+ */
+function mapParams(processArguments = []) {
+  const args = {};
+
+  processArguments.forEach((arg, index, array) => {
+    if (arg.includes('--')) {
+      const nextArg = array[index + 1];
+      const key = arg
+        .replace('--', '')
+        .split('-')
+        .reduce((prev, next) => prev + next.charAt(0).toUpperCase() + next.slice(1));
+
+      if (nextArg && !nextArg.includes('--')) {
+        args[key] = nextArg;
+      } else {
+        args[key] = true;
+      }
+    }
+  });
+
+  return args;
 }
 
-function validate(processArguments) {
-  if (processArguments.includes('--mode')) {
-    if (processArguments.includes('dev')) {
-      parameterDeprecatedMessage('dev', 'development');
-    }
+/**
+ * Notify if old api uses
+ * @param {*} argv
+ * @todo remove on major release
+ */
+function validate(argv) {
+  if (argv.mode === 'dev') {
+    report.parameterDeprecated('dev', 'development');
+  }
 
-    if (processArguments.includes('bug')) {
-      parameterDeprecatedMessage('bug', 'release-patch');
-    }
+  if (argv.mode === 'bug') {
+    report.parameterDeprecated('bug', 'release-patch');
+  }
 
-    if (processArguments.includes('bugfix')) {
-      parameterDeprecatedMessage('bugfix', 'release-patch');
-    }
+  if (argv.mode === 'bugfix') {
+    report.parameterDeprecated('bugfix', 'release-patch');
+  }
 
-    if (processArguments.includes('min')) {
-      parameterDeprecatedMessage('min', 'release-minor');
-    }
+  if (argv.mode === 'min') {
+    report.parameterDeprecated('min', 'release-minor');
+  }
 
-    if (processArguments.includes('minor')) {
-      parameterDeprecatedMessage('minor', 'release-minor');
-    }
+  if (argv.mode === 'minor') {
+    report.parameterDeprecated('minor', 'release-minor');
+  }
 
-    if (processArguments.includes('maj')) {
-      parameterDeprecatedMessage('maj', 'release-major');
-    }
+  if (argv.mode === 'maj') {
+    report.parameterDeprecated('maj', 'release-major');
+  }
 
-    if (processArguments.includes('major')) {
-      parameterDeprecatedMessage('major', 'release-major');
-    }
+  if (argv.mode === 'major') {
+    report.parameterDeprecated('major', 'release-major');
   }
 }
 
@@ -51,33 +76,30 @@ function validate(processArguments) {
  * }}
  */
 function parse(processArguments = []) {
-  const argv = minimist(processArguments.slice(2));
-  const noValidate = argv.validate === false;
-  // processArguments.includes('--no-validate');
+  const argv = mapParams(processArguments);
+
+  // TODO remove on new api - major release
+  validate(argv);
 
   let production = !argv.development && !argv.dev && argv.mode !== 'dev' && argv.mode !== 'development';
-  // !processArguments.includes('--dev') && !processArguments.includes('--development');
-  let patch = processArguments.includes('--release-patch');
-  let minor = processArguments.includes('--release-minor');
-  let major = processArguments.includes('--release-major');
+  let patch = !!argv.releasePatch;
+  let minor = !!argv.releaseMinor;
+  let major = !!argv.releaseMajor;
 
   // Old api
   // TODO refactor - remove in new api
-  if (processArguments.includes('--mode')) {
+  if (argv.mode) {
     production = !processArguments.includes('dev');
     patch = argv.mode === 'bug' || argv.mode === 'bugfix';
-    // processArguments.includes('bug') || processArguments.includes('bugfix');
     minor = argv.mode === 'min' || argv.mode === 'minor';
-    // processArguments.includes('min') || processArguments.includes('minor');
     major = argv.mode === 'maj' || argv.mode === 'major';
-    // processArguments.includes('maj') || processArguments.includes('major');
   }
 
   const keepFilePathComments = !production;
   const keepCodeComments = !production;
 
   return {
-    noValidate,
+    noValidate: !!argv.noValidate,
     production,
     keepCodeComments,
     keepFilePathComments,
@@ -88,6 +110,7 @@ function parse(processArguments = []) {
 }
 
 module.exports = {
+  map: mapParams,
   parse,
   validate,
 };

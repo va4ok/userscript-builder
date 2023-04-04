@@ -87,7 +87,7 @@ describe('format meta', () => {
   });
 
   describe('validate', () => {
-    const visitMessage = 'Please visit https://www.tampermonkey.net/documentation.php?ext=dhdg for more details';
+    const visitMessage = '\x1b[0mPlease visit https://www.tampermonkey.net/documentation.php?ext=dhdg for more details\x1b[0m';
 
     beforeEach(() => {
       jest.resetAllMocks();
@@ -140,8 +140,8 @@ describe('format meta', () => {
         someInvalidProperty: 'some string',
         'name:jdj': 'name:jdj',
       };
-      const msg1 = 'Looks you are trying to use unsupported meta property: someInvalidProperty';
-      const msg2 = 'Looks you are trying to use unsupported meta property: name:jdj';
+      const msg1 = '\x1b[0mLooks you are trying to use unsupported meta property: someInvalidProperty\x1b[0m';
+      const msg2 = '\x1b[0mLooks you are trying to use unsupported meta property: name:jdj\x1b[0m';
 
       meta.validate(metaObj);
 
@@ -174,22 +174,22 @@ describe('format meta', () => {
         nocompat: [null, null],
       };
 
-      const msg1 = 'Looks like you are trying to use multiple meta property that should be single: namespace';
-      const msg2 = 'Looks like you are trying to use multiple meta property that should be single: version';
-      const msg3 = 'Looks like you are trying to use multiple meta property that should be single: author';
-      const msg5 = 'Looks like you are trying to use multiple meta property that should be single: homepageURL';
-      const msg6 = 'Looks like you are trying to use multiple meta property that should be single: website';
-      const msg7 = 'Looks like you are trying to use multiple meta property that should be single: source';
-      const msg9 = 'Looks like you are trying to use multiple meta property that should be single: iconURL';
-      const msg11 = 'Looks like you are trying to use multiple meta property that should be single: defaulticon';
-      const msg13 = 'Looks like you are trying to use multiple meta property that should be single: icon64URL';
-      const msg14 = 'Looks like you are trying to use multiple meta property that should be single: updateURL';
-      const msg15 = 'Looks like you are trying to use multiple meta property that should be single: downloadURL';
-      const msg16 = 'Looks like you are trying to use multiple meta property that should be single: supportURL';
-      const msg17 = 'Looks like you are trying to use multiple meta property that should be single: run-at';
-      const msg18 = 'Looks like you are trying to use multiple meta property that should be single: noframes';
-      const msg19 = 'Looks like you are trying to use multiple meta property that should be single: unwrap';
-      const msg20 = 'Looks like you are trying to use multiple meta property that should be single: nocompat';
+      const msg1 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: namespace\x1b[0m';
+      const msg2 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: version\x1b[0m';
+      const msg3 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: author\x1b[0m';
+      const msg5 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: homepageURL\x1b[0m';
+      const msg6 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: website\x1b[0m';
+      const msg7 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: source\x1b[0m';
+      const msg9 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: iconURL\x1b[0m';
+      const msg11 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: defaulticon\x1b[0m';
+      const msg13 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: icon64URL\x1b[0m';
+      const msg14 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: updateURL\x1b[0m';
+      const msg15 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: downloadURL\x1b[0m';
+      const msg16 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: supportURL\x1b[0m';
+      const msg17 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: run-at\x1b[0m';
+      const msg18 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: noframes\x1b[0m';
+      const msg19 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: unwrap\x1b[0m';
+      const msg20 = '\x1b[0mLooks like you are trying to use multiple meta property that should be single: nocompat\x1b[0m';
 
       meta.validate(metaObj);
       expect(consoleLog).toHaveBeenCalledTimes(17);
@@ -224,15 +224,15 @@ describe('format meta', () => {
         'run-at': 'document-startr',
       };
 
-      const msg1 = 'Looks like meta property: homepage have invalid value: gift+https://homepage.url';
-      const msg2 = 'Looks like meta property: updateURL have invalid value: httpd://updateURL.url';
-      const msg3 = 'Looks like meta property: downloadURL have invalid value: htt://downloadURL.url/#downloadURL';
-      const msg4 = 'Looks like meta property: supportURL have invalid value: gi+https://supportURL.url';
-      const msg5 = 'Looks like meta property: include have invalid value: http://include.url/#/';
-      const msg6 = 'Looks like meta property: match have invalid value: http://match.url/#';
-      const msg7 = 'Looks like meta property: exclude have invalid value: http://exclude.url#';
-      const msg8 = 'Looks like meta property: run-at have invalid value: document-startr';
-      const msg9 = 'updateURL property requires version property as well.';
+      const msg1 = '\x1b[0mLooks like meta property: homepage have invalid value: gift+https://homepage.url\x1b[0m';
+      const msg2 = '\x1b[0mLooks like meta property: updateURL have invalid value: httpd://updateURL.url\x1b[0m';
+      const msg3 = '\x1b[0mLooks like meta property: downloadURL have invalid value: htt://downloadURL.url/#downloadURL\x1b[0m';
+      const msg4 = '\x1b[0mLooks like meta property: supportURL have invalid value: gi+https://supportURL.url\x1b[0m';
+      const msg5 = '\x1b[0mLooks like meta property: include have invalid value: http://include.url/#/\x1b[0m';
+      const msg6 = '\x1b[0mLooks like meta property: match have invalid value: http://match.url/#\x1b[0m';
+      const msg7 = '\x1b[0mLooks like meta property: exclude have invalid value: http://exclude.url#\x1b[0m';
+      const msg8 = '\x1b[0mLooks like meta property: run-at have invalid value: document-startr\x1b[0m';
+      const msg9 = '\x1b[0mupdateURL property requires version property as well.\x1b[0m';
 
       meta.validate(metaObj);
 
